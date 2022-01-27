@@ -1,0 +1,19 @@
+apiVersion: nais.io/v1
+kind: Alert
+metadata:
+  name: aiven-poke
+  namespace: aura
+  labels:
+    team: aura
+spec:
+  receivers:
+    slack:
+      channel: '#nais-alerts-prod'
+  alerts:
+    - alert: aiven-poke has not run for 1 week in {{ clusterName }}
+      expr: 'time() - max(kube_job_status_completion_time{job_name=~"aiven-poke.+"}) > (8*60*60*24)'
+      description: "Job is scheduled to run every week, and is responsible for poking teams with Aiven related issues."
+      action: "Check if Job has run successfully:\n- `kubectl describe cronjob -n aura aiven-poke`\n- `kubectl describe pod -l app=aiven-poke`\n- `kubectl logs -l app=aiven-poke --tail=1000`"
+      sla: respond within office hours
+      severity: warning
+      for: 1m

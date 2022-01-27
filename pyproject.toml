@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "aiven-poke"
+version = "0.1.0"
+description = "Poke teams about Aiven related issues"
+authors = ["NAIS <aura@nav.no>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^2.0.2"
+fiaas-logging = "^0.1.1"
+k8s = "^0.19.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+prospector = "^1.5.1"
+pytest-cov = "^3.0.0"
+pytest-sugar = "^0.9.4"
+
+[tool.poetry.scripts]
+aiven-poke = "aiven_poke.main:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,14 @@
+apiVersion: "nais.io/v1"
+kind: "Naisjob"
+metadata:
+  name: aiven-poke
+  namespace: aura
+  labels:
+    team: aura
+spec:
+  image: "{{ image }}"
+  schedule: "23 9 * * 3"
+  liveness:
+    path: /isHealthy
+  readiness:
+    path: /isReady
