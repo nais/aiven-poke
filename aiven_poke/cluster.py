@@ -1,6 +1,4 @@
-import os
 from collections import defaultdict
-from pprint import pprint
 
 from k8s.base import Model
 from k8s.fields import Field

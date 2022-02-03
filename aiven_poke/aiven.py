@@ -1,7 +1,5 @@
-import os
 from collections import defaultdict
 from dataclasses import dataclass
-from pprint import pprint
 
 import requests
 

@@ -31,7 +31,7 @@ def compare(aiven_topics, cluster_topics):
 def poke(settings):
     aiven_topics = get_aiven_topics(settings)
     cluster_topics = get_cluster_topics()
-    missing_in_cluster = compare(aiven_topics, cluster_topics)
+    missing_in_cluster = compare(aiven_topics, cluster_topics)  # NOQA
     # TODO: Poke someone!
     return 0
 
