@@ -5,7 +5,7 @@ ARG BASEIMAGE=ghcr.io/$EARTHLY_GIT_PROJECT_NAME
 
 FROM busybox
 
-build:
+deps:
     FROM python:${PY_VERSION}-slim
 
     WORKDIR /app
@@ -14,15 +14,22 @@ build:
     ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
     COPY pyproject.toml poetry.lock .
+    RUN poetry install --no-dev --no-root --no-interaction
+
+    SAVE ARTIFACT .venv
+    SAVE IMAGE --cache-hint
+
+
+build:
+    FROM +deps
+
     RUN poetry install --no-root --no-interaction
 
     COPY --dir .prospector.yaml aiven_poke tests .
     RUN poetry install --no-interaction && \
         poetry run prospector && \
         poetry run pytest
-    RUN poetry install --no-dev --no-interaction
 
-    SAVE ARTIFACT .venv
     SAVE ARTIFACT aiven_poke
     SAVE IMAGE --cache-hint
 
@@ -39,11 +46,12 @@ docker:
 
     WORKDIR /app
 
-    COPY --dir +build/.venv +build/aiven_poke .
+    COPY --dir +deps/.venv .
+    COPY --dir +build/aiven_poke .
 
     ENV PATH="/bin:/usr/bin:/usr/local/bin:/app/.venv/bin"
 
-    ENTRYPOINT ["aiven-poke"]
+    CMD ["/app/.venv/bin/python", "-m", "aiven_poke"]
 
     SAVE IMAGE --push ${BASEIMAGE}:${IMAGE_TAG}
     SAVE IMAGE --push ${BASEIMAGE}:latest
