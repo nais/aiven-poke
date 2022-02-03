@@ -47,7 +47,7 @@ def _init_logging():
 def main():
     _init_logging()
     settings = Settings()
-    init_k8s_client()
+    init_k8s_client(settings.api_server)
     server = start_server()
     try:
         for sig in (signal.SIGTERM, signal.SIGINT):

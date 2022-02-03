@@ -22,14 +22,14 @@ class Topic(Model):
     spec = Field(TopicSpec)
 
 
-def init_k8s_client():
+def init_k8s_client(api_server):
     # TODO: Implement loading from KUBECONFIG for local development?
     from k8s import config
     try:
         config.use_in_cluster_config()
     except IOError:
-        # Assume kubectl proxy is running
-        config.api_server = "http://localhost:8001"
+        # Assume kubectl proxy is running without auth at given URL
+        config.api_server = api_server
 
 
 def get_cluster_topics():
