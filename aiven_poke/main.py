@@ -3,6 +3,7 @@ import logging
 import os
 import signal
 import sys
+from collections import defaultdict
 
 from fiaas_logging import init_logging
 
@@ -21,10 +22,10 @@ def signal_handler(signum, frame):
 
 
 def compare(aiven_topics, cluster_topics):
-    missing = set()
+    missing = defaultdict(set)
     for team, topics in aiven_topics.items():
         in_cluster = cluster_topics[team]
-        missing.update(topics - in_cluster)
+        missing[team].update(topics - in_cluster)
     return missing
 
 
