@@ -6,3 +6,4 @@ class Settings(BaseSettings):
     main_project: str = "nav-integration-test"
     api_server: str = "http://localhost:8001"
     webhook_url: HttpUrl = None
+    webhook_enabled: bool = True

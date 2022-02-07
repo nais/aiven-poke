@@ -66,7 +66,7 @@ def create_payload(team_topic):
 
 def post_payload(settings, payload):
     data = dataclasses.asdict(payload)
-    if settings.webhook_url:
+    if settings.webhook_enabled and settings.webhook_url is not None:
         SESSION.post(settings.webhook_url, json=data)
     else:
         LOG.info("Would have sent payload: %s", json.dumps(data))
