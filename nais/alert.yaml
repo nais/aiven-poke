@@ -8,9 +8,9 @@ metadata:
 spec:
   receivers:
     slack:
-      channel: '#nais-alerts-prod'
+      channel: '#nais-alerts-info'
   alerts:
-    - alert: aiven-poke has not run for 1 week in {{ clusterName }}
+    - alert: aiven-poke has not run for 1 week
       expr: 'time() - max(kube_job_status_completion_time{job_name=~"aiven-poke.+"}) > (8*60*60*24)'
       description: "Job is scheduled to run every week, and is responsible for poking teams with Aiven related issues."
       action: "Check if Job has run successfully:\n- `kubectl describe cronjob -n aura aiven-poke`\n- `kubectl describe pod -l app=aiven-poke`\n- `kubectl logs -l app=aiven-poke --tail=1000`"
