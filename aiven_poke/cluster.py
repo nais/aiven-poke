@@ -1,8 +1,13 @@
+import functools
 from collections import defaultdict
 
 from k8s.base import Model
 from k8s.fields import Field
 from k8s.models.common import ObjectMeta
+from k8s.models.namespace import Namespace
+
+SLACK_CHANNEL = "slack-channel"
+PLATFORM_ALERTS_CHANNEL = "platform-alerts-channel"
 
 
 class TopicSpec(Model):
@@ -30,6 +35,13 @@ def init_k8s_client(api_server):
     except IOError:
         # Assume kubectl proxy is running without auth at given URL
         config.api_server = api_server
+
+
+@functools.lru_cache
+def get_slack_channel(team):
+    ns = Namespace.get(team)
+    an = ns.metadata.annotations
+    return an.get(PLATFORM_ALERTS_CHANNEL, an.get(SLACK_CHANNEL))
 
 
 def get_cluster_topics():

@@ -3,14 +3,15 @@ import logging
 import os
 import signal
 import sys
-from collections import defaultdict
 
 from fiaas_logging import init_logging
 
 from aiven_poke.aiven import get_aiven_topics
-from aiven_poke.cluster import init_k8s_client, get_cluster_topics
+from aiven_poke.cluster import init_k8s_client, get_cluster_topics, get_slack_channel
 from aiven_poke.endpoints import start_server
+from aiven_poke.models import TeamTopic
 from aiven_poke.settings import Settings
+from aiven_poke.slack import poke
 
 
 class ExitOnSignal(Exception):
@@ -22,19 +23,12 @@ def signal_handler(signum, frame):
 
 
 def compare(aiven_topics, cluster_topics):
-    missing = defaultdict(set)
+    missing = set()
     for team, topics in aiven_topics.items():
         in_cluster = cluster_topics[team]
-        missing[team].update(topics - in_cluster)
+        team_topic = TeamTopic(get_slack_channel(team), topics - in_cluster)
+        missing.add(team_topic)
     return missing
-
-
-def poke(settings):
-    aiven_topics = get_aiven_topics(settings)
-    cluster_topics = get_cluster_topics()
-    missing_in_cluster = compare(aiven_topics, cluster_topics)  # NOQA
-    # TODO: Poke someone!
-    return 0
 
 
 def _init_logging():
@@ -50,13 +44,17 @@ def main():
     settings = Settings()
     init_k8s_client(settings.api_server)
     server = start_server()
+    exit_code = 0
     try:
         for sig in (signal.SIGTERM, signal.SIGINT):
             signal.signal(sig, signal_handler)
         try:
-            exit_code = poke(settings)
+            aiven_topics = get_aiven_topics(settings)
+            cluster_topics = get_cluster_topics()
+            missing_in_cluster = compare(aiven_topics, cluster_topics)
+            poke(settings, missing_in_cluster)
         except ExitOnSignal:
-            exit_code = 0
+            pass
         except Exception as e:
             logging.exception(f"unwanted exception: {e}")
             exit_code = 113

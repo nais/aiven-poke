@@ -1,6 +1,9 @@
+from unittest import mock
+
 import pytest
 
 from aiven_poke.main import compare
+from aiven_poke.models import TeamTopic
 
 
 class TestCompare:
@@ -23,11 +26,13 @@ class TestCompare:
     @pytest.fixture
     def expected(self):
         return {
-            "team1": {"team1.topic1"},
-            "team2": {"team2.topic2"},
-            "team3": {"team3.topic3"},
+            TeamTopic("#team1", {"team1.topic1"}),
+            TeamTopic("#team2", {"team2.topic2"}),
+            TeamTopic("#team3", {"team3.topic3"}),
         }
 
     def test_compare(self, aiven_topics, cluster_topics, expected):
-        actual = compare(aiven_topics, cluster_topics)
-        assert actual == expected
+        with mock.patch("aiven_poke.main.get_slack_channel") as m:
+            m.side_effect = lambda t: f"#{t}"
+            actual = compare(aiven_topics, cluster_topics)
+            assert actual == expected
