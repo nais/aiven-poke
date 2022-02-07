@@ -2,7 +2,7 @@ import dataclasses
 import enum
 import json
 import logging
-from typing import Optional
+from typing import Optional, Iterable
 
 import requests
 
@@ -73,7 +73,7 @@ def post_payload(settings, payload):
     return data
 
 
-def poke(settings: Settings, missing: list[TeamTopic]):
+def poke(settings: Settings, missing: Iterable[TeamTopic]):
     """Poke the teams with topics missing in the cluster"""
     for team_topic in missing:
         payload = create_payload(team_topic)

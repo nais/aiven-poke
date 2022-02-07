@@ -50,7 +50,7 @@ def main():
             signal.signal(sig, signal_handler)
         try:
             aiven_topics = get_aiven_topics(settings)
-            cluster_topics = get_cluster_topics()
+            cluster_topics = get_cluster_topics(settings)
             missing_in_cluster = compare(aiven_topics, cluster_topics)
             poke(settings, missing_in_cluster)
         except ExitOnSignal:

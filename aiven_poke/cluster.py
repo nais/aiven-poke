@@ -44,9 +44,10 @@ def get_slack_channel(team):
     return an.get(PLATFORM_ALERTS_CHANNEL, an.get(SLACK_CHANNEL))
 
 
-def get_cluster_topics():
+def get_cluster_topics(settings):
     cluster_topics = Topic.list(namespace=None)
     namespaced_topics = defaultdict(set)
     for topic in cluster_topics:
-        namespaced_topics[topic.metadata.namespace].add(f"{topic.metadata.namespace}.{topic.metadata.name}")
+        if topic.spec.pool == settings.main_project:
+            namespaced_topics[topic.metadata.namespace].add(f"{topic.metadata.namespace}.{topic.metadata.name}")
     return namespaced_topics
