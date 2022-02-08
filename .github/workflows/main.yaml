@@ -39,15 +39,15 @@ jobs:
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
-        cluster:
-          - dev-gcp
-          - prod-gcp
+        environment:
+          - dev
+          - prod
     steps:
       - uses: "actions/checkout@v2"
       - uses: nais/deploy/actions/deploy@v1
-        name: Deploy to ${{ matrix.cluster }}
+        name: Deploy to ${{ matrix.cluster }}-gcp
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: ${{ matrix.cluster }}
+          CLUSTER: ${{ matrix.cluster }}-gcp
           RESOURCE: nais/aiven-poke.yaml,nais/network-policy-apiserver.yaml # TODO: Add alert when done testing ,nais/alert.yaml
-          VAR: image=${{ needs.build.outputs.image }},clusterName=${{ matrix.cluster }}
+          VAR: image=${{ needs.build.outputs.image }},clusterName=${{ matrix.cluster }}-gcp,mainProject=nav-${{ matrix-cluster}}

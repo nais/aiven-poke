@@ -15,6 +15,8 @@ spec:
     path: /isReady
   envFrom:
     - secret: aiven-poke
-  env: # TODO: Remove when done testing
-    - name: WEBHOOK_ENABLED
+  env:
+    - name: MAIN_PROJECT
+      value: "{{ mainProject }}"
+    - name: WEBHOOK_ENABLED # TODO: Remove when done testing
       value: "false"
