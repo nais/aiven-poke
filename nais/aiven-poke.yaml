@@ -17,4 +17,4 @@ spec:
     - secret: aiven-poke
   env: # TODO: Remove when done testing
     - name: WEBHOOK_ENABLED
-      value: false
+      value: "false"
