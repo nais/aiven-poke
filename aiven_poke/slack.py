@@ -81,6 +81,7 @@ def poke(settings: Settings, missing: Iterable[TeamTopic]):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     settings = Settings()
-    tt = TeamTopic("@morten.lied.johansen", frozenset(("aura.test-topic", "aura.topic-test")))
+    tt = TeamTopic("#pig-aiven", frozenset(("aura.test-topic", "aura.topic-test")))
     poke(settings, [tt])

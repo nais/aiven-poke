@@ -7,8 +7,14 @@ metadata:
     team: aura
 spec:
   image: "{{ image }}"
-  schedule: "23 9 * * 3"
+  # TODO: Use this schedule when enabling webhook schedule: "23 9 * * 3"
+  schedule: "23 * * * *"
   liveness:
     path: /isHealthy
   readiness:
     path: /isReady
+  envFrom:
+    - secret: aiven-poke
+  env: # TODO: Remove when done testing
+    - name: WEBHOOK_ENABLED
+      value: false
