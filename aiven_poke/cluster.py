@@ -1,4 +1,5 @@
 import functools
+import logging
 from collections import defaultdict
 
 from k8s.base import Model
@@ -8,6 +9,8 @@ from k8s.models.namespace import Namespace
 
 SLACK_CHANNEL = "slack-channel"
 PLATFORM_ALERTS_CHANNEL = "platform-alerts-channel"
+
+LOG = logging.getLogger(__name__)
 
 
 class TopicSpec(Model):
@@ -50,4 +53,5 @@ def get_cluster_topics(settings):
     for topic in cluster_topics:
         if topic.spec.pool == settings.main_project:
             namespaced_topics[topic.metadata.namespace].add(f"{topic.metadata.namespace}.{topic.metadata.name}")
+    LOG.info("%d namespaces with topics found in cluster", len(namespaced_topics))
     return namespaced_topics

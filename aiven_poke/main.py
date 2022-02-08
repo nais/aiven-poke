@@ -13,6 +13,8 @@ from aiven_poke.models import TeamTopic
 from aiven_poke.settings import Settings
 from aiven_poke.slack import poke
 
+LOG = logging.getLogger(__name__)
+
 
 class ExitOnSignal(Exception):
     pass
@@ -28,6 +30,7 @@ def compare(aiven_topics, cluster_topics):
         in_cluster = cluster_topics[team]
         team_topic = TeamTopic(get_slack_channel(team), topics - in_cluster)
         missing.add(team_topic)
+    LOG.info("%d teams with topics on Aiven missing in cluster", len(missing))
     return missing
 
 
@@ -49,10 +52,12 @@ def main():
         for sig in (signal.SIGTERM, signal.SIGINT):
             signal.signal(sig, signal_handler)
         try:
+            LOG.info("Starting job")
             aiven_topics = get_aiven_topics(settings)
             cluster_topics = get_cluster_topics(settings)
             missing_in_cluster = compare(aiven_topics, cluster_topics)
             poke(settings, missing_in_cluster)
+            LOG.info("Completed poking")
         except ExitOnSignal:
             pass
         except Exception as e:

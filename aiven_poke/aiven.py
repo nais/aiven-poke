@@ -1,7 +1,10 @@
+import logging
 from collections import defaultdict
 from dataclasses import dataclass
 
 import requests
+
+LOG = logging.getLogger(__name__)
 
 
 @dataclass
@@ -65,4 +68,5 @@ def get_aiven_topics(settings):
         if "." in topic.topic_name:
             team, _ = topic.topic_name.split(".", maxsplit=1)
             team_topics[team].add(topic.topic_name)
+    LOG.info("%d teams with topics found on Aiven", len(team_topics))
     return team_topics
