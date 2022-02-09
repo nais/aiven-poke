@@ -1,6 +1,5 @@
 import dataclasses
 import enum
-import json
 import logging
 from typing import Optional, Iterable
 
@@ -65,12 +64,16 @@ def create_payload(team_topic):
 
 
 def post_payload(settings, payload):
-    data = dataclasses.asdict(payload)
     if settings.webhook_enabled and settings.webhook_url is not None:
+        data = dataclasses.asdict(payload)
         SESSION.post(settings.webhook_url, json=data)
     else:
-        LOG.info("Would have sent payload: %s", json.dumps(data))
-    return data
+        channel = payload.channel
+        try:
+            topics = payload.attachments[-1].fields[-1].value
+        except KeyError:
+            topics = "<unable to take topics from payload>"
+        LOG.info("Would have notified %s about topics: %s", channel, topics)
 
 
 def poke(settings: Settings, missing: Iterable[TeamTopic]):
