@@ -25,13 +25,15 @@ def signal_handler(signum, frame):
 
 
 def compare(aiven_topics, cluster_topics):
-    missing = set()
+    result = set()
     for team, topics in aiven_topics.items():
         in_cluster = cluster_topics[team]
-        team_topic = TeamTopic(get_slack_channel(team), topics - in_cluster)
-        missing.add(team_topic)
-    LOG.info("%d teams with topics on Aiven missing in cluster", len(missing))
-    return missing
+        missing = topics - in_cluster
+        if missing:
+            team_topic = TeamTopic(get_slack_channel(team), missing)
+            result.add(team_topic)
+    LOG.info("%d teams with topics on Aiven missing in cluster", len(result))
+    return result
 
 
 def _init_logging():

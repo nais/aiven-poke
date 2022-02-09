@@ -13,6 +13,7 @@ class TestCompare:
             "team1": {"team1.topic1", "team1.topic2", "team1.topic3"},
             "team2": {"team2.topic1", "team2.topic2", "team2.topic3"},
             "team3": {"team3.topic1", "team3.topic2", "team3.topic3"},
+            "team4": {"team4.topic1", "team4.topic2", "team4.topic3"},
         }
 
     @pytest.fixture
@@ -21,6 +22,7 @@ class TestCompare:
             "team1": {"team1.topic2", "team1.topic3"},
             "team2": {"team2.topic1", "team2.topic3"},
             "team3": {"team3.topic1", "team3.topic2"},
+            "team4": {"team4.topic1", "team4.topic2", "team4.topic3"},
         }
 
     @pytest.fixture
