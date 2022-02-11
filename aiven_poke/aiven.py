@@ -65,6 +65,8 @@ def get_aiven_topics(settings):
     aiven_topics = aiven.get_topics()
     team_topics = defaultdict(set)
     for topic in aiven_topics:
+        if "_stream_" in topic.topic_name:
+            continue
         if "." in topic.topic_name:
             team, _ = topic.topic_name.split(".", maxsplit=1)
             team_topics[team].add(topic.topic_name)
