@@ -7,8 +7,7 @@ metadata:
     team: aura
 spec:
   image: "{{ image }}"
-  # TODO: Use this schedule when enabling webhook schedule: "23 9 * * 3"
-  schedule: "23 * * * *"
+  schedule: "23 9 * * 3"
   liveness:
     path: /isHealthy
   readiness:
@@ -18,5 +17,3 @@ spec:
   env:
     - name: MAIN_PROJECT
       value: "{{ mainProject }}"
-    - name: WEBHOOK_ENABLED # TODO: Remove when done testing
-      value: "false"
