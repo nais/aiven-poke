@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 
 from aiven_poke.settings import Settings
-from aiven_poke.slack import Attachment, Color, Field, Payload, post_payload
+from aiven_poke.slack import Attachment, Color, Divider, Header, Payload, post_payload, Text, TextType
 
 WEBHOOK_URL = "https://example.com"
 
@@ -11,9 +11,10 @@ WEBHOOK_URL = "https://example.com"
 class TestSlack:
     @pytest.fixture
     def payload(self):
-        return Payload("#channel", "text", [
-            Attachment("att_text", "att_fallback", "att_pretext", Color.GOOD, [
-                Field("title", "value"),
+        return Payload("#channel", "text", attachments=[
+            Attachment(Color.GOOD, "att_fallback", blocks=[
+                Header(Text(TextType.PLAIN, "header")),
+                Divider(),
             ])
         ])
 
