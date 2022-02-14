@@ -2,6 +2,7 @@ from unittest import mock
 
 import pytest
 
+from aiven_poke.models import TeamTopic
 from aiven_poke.settings import Settings
 from aiven_poke.slack import Attachment, Color, Divider, Header, Payload, post_payload, Text, TextType
 
@@ -21,5 +22,6 @@ class TestSlack:
     def test_post_payload(self, payload):
         with mock.patch("aiven_poke.slack.SESSION") as m:
             settings = Settings(aiven_token="fake_token", webhook_url=WEBHOOK_URL)
-            post_payload(settings, payload)
+            team_topic = TeamTopic("#channel", {"aura.test-topic", "aura.topic-test"})
+            post_payload(settings, payload, team_topic)
             m.post.assert_called()

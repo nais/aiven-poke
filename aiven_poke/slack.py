@@ -115,7 +115,7 @@ def create_payload(team_topic, main_project):
     ])
 
 
-def post_payload(settings, payload):
+def post_payload(settings, payload, team_topic):
     if settings.webhook_enabled and settings.webhook_url is not None:
         data = dataclasses.asdict(payload)
         resp = SESSION.post(settings.webhook_url, json=data)
@@ -124,20 +124,16 @@ def post_payload(settings, payload):
             LOG.debug(dumped)
         if not resp.ok:
             LOG.error("Failed sending data to webhook. The received message was:\n%s", resp.text)
-    else:
-        channel = payload.channel
-        try:
-            topics = payload.attachments[-1].fields[-1].value
-        except KeyError:
-            topics = "<unable to take topics from payload>"
-        LOG.info("Would have notified %s about topics: %s", channel, topics)
+    channel = team_topic.slack_channel
+    topics = ", ".join(team_topic.topics)
+    LOG.info("Notified %s about topics: %s", channel, topics)
 
 
 def poke(settings: Settings, missing: Iterable[TeamTopic]):
     """Poke the teams with topics missing in the cluster"""
     for team_topic in missing:
         payload = create_payload(team_topic, settings.main_project)
-        post_payload(settings, payload)
+        post_payload(settings, payload, team_topic)
 
 
 if __name__ == '__main__':

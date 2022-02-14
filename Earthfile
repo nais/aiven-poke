@@ -33,7 +33,7 @@ build:
     SAVE ARTIFACT aiven_poke
     SAVE IMAGE --cache-hint
 
-tests:
+test:
     LOCALLY
     RUN poetry install --no-interaction && \
         poetry run prospector && \
