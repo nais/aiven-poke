@@ -44,7 +44,10 @@ def init_k8s_client(api_server):
 def get_slack_channel(team):
     ns = Namespace.get(team)
     an = ns.metadata.annotations
-    return an.get(PLATFORM_ALERTS_CHANNEL, an.get(SLACK_CHANNEL))
+    slack_channel = an.get(PLATFORM_ALERTS_CHANNEL, an.get(SLACK_CHANNEL))
+    if not slack_channel.startswith("#"):
+        return f"#{slack_channel}"
+    return slack_channel
 
 
 def get_cluster_topics(settings):
