@@ -30,7 +30,7 @@ def compare(aiven_topics, cluster_topics):
         in_cluster = cluster_topics[team]
         missing = topics - in_cluster
         if missing:
-            team_topic = TeamTopic(get_slack_channel(team), missing)
+            team_topic = TeamTopic(team, get_slack_channel(team), missing)
             result.add(team_topic)
     LOG.info("%d teams with topics on Aiven missing in cluster", len(result))
     return result

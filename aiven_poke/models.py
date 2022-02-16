@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class TeamTopic:
+    team: str
     slack_channel: str
     topics: frozenset[str]
 

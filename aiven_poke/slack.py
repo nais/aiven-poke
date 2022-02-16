@@ -24,11 +24,11 @@ WHAT_IS_THIS = " ".join(textwrap.dedent("""
     which indicates that this topic may be forgotten.
 """).splitlines())
 
-TOPIC_HEADER = "*Forgotten topics found in the {main_project} pool*"
+TOPIC_HEADER = "*Forgotten topics found in the {main_project} pool for namespace `{namespace}`*"
 
 SOLUTION_HEADER = "*Solution*"
 SOLUTION1 = " ".join(textwrap.dedent(f"""\
-    To rectify the situation, start by <{CREATE_DOC}|re-creating the topic>.
+    To rectify the situation, start by <{CREATE_DOC}|re-creating each topic> in the `{{team}}` namespace.
     If the intention was to delete the topic, follow the procedure for <{PERMA_DELETE_DOC}|permanently deleting data>.
 """).splitlines())
 SOLUTION2 = " ".join(textwrap.dedent("""\
@@ -53,7 +53,7 @@ class BlockType(str, enum.Enum):
 
 class TextType(str, enum.Enum):
     PLAIN = "plain_text"
-    MARKDOWN = "mrkdwn"
+    MRKDWN = "mrkdwn"
 
 
 @dataclasses.dataclass
@@ -100,17 +100,23 @@ class Payload:
     attachments: list[Attachment] = dataclasses.field(default_factory=list)
 
 
+def format_topic(topic):
+    namespace, topic_name = topic.split(".", maxsplit=1)
+    return f"`{topic_name}` in namespace `namespace`"
+
+
 def create_payload(team_topic, main_project):
-    topics = [Text(TextType.PLAIN, topic) for topic in team_topic.topics]
+    topic_header = TOPIC_HEADER.format(main_project=main_project, namespace=team_topic.team)
+    topics = [Text(TextType.MRKDWN, "`{}`".format(topic.split(".", maxsplit=1)[-1])) for topic in team_topic.topics]
     return Payload(team_topic.slack_channel, attachments=[
         Attachment(Color.WARNING, FALLBACK, blocks=[
             Header(Text(TextType.PLAIN, MAIN_HEADER)),
-            TextSection(Text(TextType.MARKDOWN, WHAT_IS_THIS)),
-            TextSection(Text(TextType.MARKDOWN, TOPIC_HEADER.format(main_project=main_project))),
+            TextSection(Text(TextType.MRKDWN, WHAT_IS_THIS)),
+            TextSection(Text(TextType.MRKDWN, topic_header)),
             FieldsSection(topics),
-            TextSection(Text(TextType.MARKDOWN, SOLUTION_HEADER)),
-            TextSection(Text(TextType.MARKDOWN, SOLUTION1)),
-            TextSection(Text(TextType.MARKDOWN, SOLUTION2)),
+            TextSection(Text(TextType.MRKDWN, SOLUTION_HEADER)),
+            TextSection(Text(TextType.MRKDWN, SOLUTION1.format(team=team_topic.team))),
+            TextSection(Text(TextType.MRKDWN, SOLUTION2)),
         ])
     ])
 
@@ -139,5 +145,5 @@ def poke(settings: Settings, missing: Iterable[TeamTopic]):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     settings = Settings()
-    tt = TeamTopic("#pig-aiven", frozenset(("aura.test-topic", "aura.topic-test", "aura.probably-a-test-too")))
+    tt = TeamTopic("aura", "#pig-aiven", frozenset(("aura.test-topic", "aura.topic-test", "aura.probably-a-test-too")))
     poke(settings, [tt])

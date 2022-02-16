@@ -28,9 +28,9 @@ class TestCompare:
     @pytest.fixture
     def expected(self):
         return {
-            TeamTopic("#team1", {"team1.topic1"}),
-            TeamTopic("#team2", {"team2.topic2"}),
-            TeamTopic("#team3", {"team3.topic3"}),
+            TeamTopic("team1", "#team1", {"team1.topic1"}),
+            TeamTopic("team2", "#team2", {"team2.topic2"}),
+            TeamTopic("team3", "#team3", {"team3.topic3"}),
         }
 
     def test_compare(self, aiven_topics, cluster_topics, expected):
