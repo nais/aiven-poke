@@ -53,5 +53,4 @@ docker:
 
     CMD ["/app/.venv/bin/python", "-m", "aiven_poke"]
 
-    SAVE IMAGE --push ${BASEIMAGE}:${IMAGE_TAG}
-    SAVE IMAGE --push ${BASEIMAGE}:latest
+    SAVE IMAGE --push ${BASEIMAGE}:${IMAGE_TAG} ${BASEIMAGE}:latest
