@@ -35,7 +35,7 @@ class AivenAuth(requests.auth.AuthBase):
         return r
 
 
-class AivenKafka(object):
+class AivenKafka():
     base = "https://api.aiven.io/v1/project"
 
     def __init__(self, token, project, service=None, dry_run=False):

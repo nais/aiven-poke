@@ -63,7 +63,7 @@ def main():
         except ExitOnSignal:
             pass
         except Exception as e:
-            logging.exception(f"unwanted exception: {e}")
+            logging.exception("unwanted exception: %s", e)
             exit_code = 113
     finally:
         server.shutdown()

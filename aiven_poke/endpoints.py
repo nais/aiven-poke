@@ -9,7 +9,7 @@ LOG = logging.getLogger(__name__)
 
 class ServerThread(threading.Thread):
     def __init__(self, app):
-        super(ServerThread, self).__init__(daemon=True)
+        super().__init__(daemon=True)
         self.server = make_server("0.0.0.0", 8080, app)
         self.ctx = app.app_context()
         self.ctx.push()

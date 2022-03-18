@@ -100,11 +100,6 @@ class Payload:
     attachments: list[Attachment] = dataclasses.field(default_factory=list)
 
 
-def format_topic(topic):
-    namespace, topic_name = topic.split(".", maxsplit=1)
-    return f"`{topic_name}` in namespace `namespace`"
-
-
 def create_payload(team_topic, main_project):
     topic_header = TOPIC_HEADER.format(main_project=main_project, namespace=team_topic.team)
     topics = [Text(TextType.MRKDWN, "`{}`".format(topic.split(".", maxsplit=1)[-1])) for topic in team_topic.topics]
@@ -144,6 +139,5 @@ def poke(settings: Settings, missing: Iterable[TeamTopic]):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    settings = Settings()
     tt = TeamTopic("aura", "#pig-aiven", frozenset(("aura.test-topic", "aura.topic-test", "aura.probably-a-test-too")))
-    poke(settings, [tt])
+    poke(Settings(), [tt])

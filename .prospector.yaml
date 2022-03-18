@@ -10,10 +10,9 @@ ignore-paths:
   - dist
   - .tox
   - .cachedocs
+  - .pytest_cache
 
-pep8:
-  options:
-    max-line-length: 120
+max-line-length: 120
 
 mccabe:
   max-complexity: 10

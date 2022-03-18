@@ -42,9 +42,9 @@ def init_k8s_client(api_server):
 
 @functools.lru_cache
 def get_slack_channel(team):
-    ns = Namespace.get(team)
-    an = ns.metadata.annotations
-    slack_channel = an.get(PLATFORM_ALERTS_CHANNEL, an.get(SLACK_CHANNEL))
+    namespace = Namespace.get(team)
+    annotations = namespace.metadata.annotations
+    slack_channel = annotations.get(PLATFORM_ALERTS_CHANNEL, annotations.get(SLACK_CHANNEL))
     if not slack_channel.startswith("#"):
         return f"#{slack_channel}"
     return slack_channel
