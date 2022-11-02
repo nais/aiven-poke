@@ -29,5 +29,5 @@ frosted:
 vulture:
   run: false
 
-pep257:
+pydocstyle:
   run: false
