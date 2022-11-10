@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "aiven-poke.fullname" . }}
+  labels:
+    {{- include "aiven-poke.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - kafka.nais.io
+    resources:
+      - topics
+    verbs:
+      - get
+      - list
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "aiven-poke.fullname" . }}
+  labels:
+    {{- include "aiven-poke.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "aiven-poke.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "aiven-poke.fullname" . }}
+    namespace: {{ .Release.Namespace }}

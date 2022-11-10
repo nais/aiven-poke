@@ -1,0 +1,20 @@
+apiVersion: nais.io/v1
+kind: Naisjob
+metadata:
+  name: {{ include "aiven-poke.fullname" . }}
+  labels:
+    {{- include "aiven-poke.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+  schedule: "{{ .Values.schedule }}"
+  liveness:
+    path: /isHealthy
+  readiness:
+    path: /isReady
+  envFrom:
+    - secret: aiven-poke # google secret, injected by hunter2
+  env:
+    - name: MAIN_PROJECT
+      value: "{{ .Values.aivenProject }}"
+  resources:
+    {{- toYaml .Values.resources | nindent 4 }}

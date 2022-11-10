@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aiven-poke.fullname" . }}
+  labels:
+    {{- include "aiven-poke.labels" . | nindent 4 }}
+spec:
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/12
+  podSelector:
+    matchLabels:
+      {{- include "aiven-poke.selectorLabels" . | nindent 6 }}
+  policyTypes:
+  - Egress
+
