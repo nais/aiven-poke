@@ -12,7 +12,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 schedule: "23 9 * * 3"
-aivenproject: ""
+aivenProject: ""
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
