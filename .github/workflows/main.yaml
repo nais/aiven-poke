@@ -2,6 +2,14 @@ name: Create docker image
 
 on:
   push:
+    paths:
+    - 'aiven_poke/**'
+    - 'tests/**'
+    - 'Earthfile'
+    - 'pyproject.toml'
+    - 'poetry.lock'
+    - '.prospector.yaml'
+    - '.github/workflows/main.yaml'
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/nais-io/nais
