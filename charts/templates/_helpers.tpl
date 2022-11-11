@@ -40,6 +40,7 @@ helm.sh/chart: {{ include "aiven-poke.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+team: nais
 {{- end }}
 
 {{/*
