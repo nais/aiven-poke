@@ -1,3 +1,1 @@
 Aiven poke deployed.
-
-On startup it will get slack webhook and aiven api key from secret injected by hunter2.
