@@ -47,4 +47,4 @@ jobs:
 
       - name: Push Chart
         run: |-
-          helm push "${{ env.CHART }}*.tgz" "oci://${{ env.REGISTRY }}"
+          helm push ${{ env.CHART }}*.tgz oci://${{ env.REGISTRY }}
