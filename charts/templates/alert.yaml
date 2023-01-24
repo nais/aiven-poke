@@ -1,20 +1,19 @@
-{{- if .Values.alertChannel }}
-apiVersion: nais.io/v1
-kind: Alert
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
 metadata:
   name: {{ include "aiven-poke.fullname" . }}
   labels:
     {{- include "aiven-poke.labels" . | nindent 4 }}
 spec:
-  receivers:
-    slack:
-      channel: '{{ .Values.alertChannel }}'
-  alerts:
-    - alert: {{ include "aiven-poke.fullname" . }} has not run for 1 week
-      expr: 'time() - max(kube_job_status_completion_time{job_name=~"{{ include "aiven-poke.fullname" . }}.+"}) > (8*60*60*24)'
-      description: "Job is scheduled to run every week, and is responsible for poking teams with Aiven related issues."
-      action: "Check if Job has run successfully:\n- `kubectl describe cronjob -n {{ .Release.Namespace }} {{ include "aiven-poke.fullname" . }}`\n- `kubectl describe pod -l app={{ include "aiven-poke.fullname" . }}`\n- `kubectl logs -l app={{ include "aiven-poke.fullname" . }} --tail=1000`"
-      sla: respond within office hours
-      severity: warning
-      for: 1m
-{{- end }}
+  groups:
+    - name: aiven-poke running
+      rules:
+        - alert: AivenPokeNotRunning
+          expr: 'time() - max(kube_job_status_completion_time{job_name=~"{{ include "aiven-poke.fullname" . }}.+"}) > (8*60*60*24)'
+          for: 1m
+          annotations:
+            description: "Job is scheduled to run every week, and is responsible for poking teams with Aiven related issues."
+            action: "Check if Job has run successfully:\n- `kubectl describe cronjob -n {{ .Release.Namespace }} {{ include "aiven-poke.fullname" . }}`\n- `kubectl describe pod -l app={{ include "aiven-poke.fullname" . }}`\n- `kubectl logs -l app={{ include "aiven-poke.fullname" . }} --tail=1000`"
+            sla: respond within office hours
+            severity: warning
