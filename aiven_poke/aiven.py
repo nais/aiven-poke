@@ -3,6 +3,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 import requests
+from prometheus_client import Summary
 
 LOG = logging.getLogger(__name__)
 
@@ -49,7 +50,9 @@ class AivenKafka():
         self.base_url = f"{self.base}/{self.project}/service/{self.service}"
 
     def get_topics(self):
-        resp = self.session.get(f"{self.base_url}/topic")
+        s = Summary("aiven_request_latency_seconds", "Aiven requests latency", ["action", "resource"])
+        with s.labels("list", "topic").time():
+            resp = self.session.get(f"{self.base_url}/topic")
         resp.raise_for_status()
         data = resp.json()
         topics = []
@@ -60,7 +63,7 @@ class AivenKafka():
         return topics
 
 
-def get_aiven_topics(settings):
+def get_aiven_topics(settings, gauge):
     aiven = AivenKafka(settings.aiven_token, settings.main_project)
     aiven_topics = aiven.get_topics()
     team_topics = defaultdict(set)
@@ -70,5 +73,6 @@ def get_aiven_topics(settings):
         if "." in topic.topic_name:
             team, _ = topic.topic_name.split(".", maxsplit=1)
             team_topics[team].add(topic.topic_name)
+            gauge.inc()
     LOG.info("%d teams with topics found on Aiven", len(team_topics))
     return team_topics

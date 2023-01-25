@@ -5,6 +5,7 @@ import signal
 import sys
 
 from fiaas_logging import init_logging
+from prometheus_client import push_to_gateway, REGISTRY, generate_latest, Gauge
 
 from aiven_poke.aiven import get_aiven_topics
 from aiven_poke.cluster import init_k8s_client, get_cluster_topics, get_slack_channel
@@ -55,11 +56,24 @@ def main():
             signal.signal(sig, signal_handler)
         try:
             LOG.info("Starting job")
-            aiven_topics = get_aiven_topics(settings)
-            cluster_topics = get_cluster_topics(settings)
+            topic_gauge = Gauge("number_of_topics", "Number of topics found", ["source"])
+            team_gauge = Gauge("number_of_teams", "Number of teams with topics", ["source"])
+
+            aiven_topics = get_aiven_topics(settings, topic_gauge.labels("aiven"))
+            team_gauge.labels("aiven").set(len(aiven_topics))
+
+            cluster_topics = get_cluster_topics(settings, topic_gauge.labels("cluster"))
+            team_gauge.labels("cluster").set(len(cluster_topics))
+
             missing_in_cluster = compare(aiven_topics, cluster_topics)
+            team_gauge.labels("missing").set(len(missing_in_cluster))
+
             poke(settings, missing_in_cluster)
             LOG.info("Completed poking")
+            if settings.push_gateway_address:
+                push_to_gateway(settings.push_gateway_address, job='aiven-poke', registry=REGISTRY)
+            else:
+                LOG.info(generate_latest().decode("utf-8"))
         except ExitOnSignal:
             pass
         except Exception as e:

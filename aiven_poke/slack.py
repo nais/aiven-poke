@@ -5,6 +5,7 @@ import textwrap
 from typing import Optional, Iterable, Union
 
 import requests
+from prometheus_client import Summary
 from requests_toolbelt.utils import dump
 
 from aiven_poke.models import TeamTopic
@@ -119,7 +120,9 @@ def create_payload(team_topic, main_project):
 def post_payload(settings, payload, team_topic):
     if settings.webhook_enabled and settings.webhook_url is not None:
         data = dataclasses.asdict(payload)
-        resp = SESSION.post(settings.webhook_url, json=data)
+        s = Summary("slack_request_latency_seconds", "Slack requests latency")
+        with s.time():
+            resp = SESSION.post(settings.webhook_url, json=data)
         if LOG.isEnabledFor(logging.DEBUG):
             dumped = dump.dump_all(resp).decode('utf-8')
             LOG.debug(dumped)

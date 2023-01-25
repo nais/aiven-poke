@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, HttpUrl
+from pydantic import BaseSettings, HttpUrl, AnyUrl
 
 
 class Settings(BaseSettings):
@@ -7,3 +7,4 @@ class Settings(BaseSettings):
     api_server: str = "http://localhost:8001"
     webhook_url: HttpUrl = None
     webhook_enabled: bool = True
+    push_gateway_address: AnyUrl = None

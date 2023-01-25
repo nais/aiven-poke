@@ -6,6 +6,7 @@ from k8s.base import Model
 from k8s.fields import Field
 from k8s.models.common import ObjectMeta
 from k8s.models.namespace import Namespace
+from prometheus_client import Summary
 
 SLACK_CHANNEL = "slack-channel"
 PLATFORM_ALERTS_CHANNEL = "platform-alerts-channel"
@@ -50,11 +51,14 @@ def get_slack_channel(team):
     return slack_channel
 
 
-def get_cluster_topics(settings):
-    cluster_topics = Topic.list(namespace=None)
+def get_cluster_topics(settings, gauge):
+    s = Summary("k8s_latency_seconds", "Kubernetes latency", ["action", "resource"])
+    with s.labels("list", "topic").time():
+        cluster_topics = Topic.list(namespace=None)
     namespaced_topics = defaultdict(set)
     for topic in cluster_topics:
         if topic.spec.pool == settings.main_project:
             namespaced_topics[topic.metadata.namespace].add(f"{topic.metadata.namespace}.{topic.metadata.name}")
+            gauge.inc()
     LOG.info("%d namespaces with topics found in cluster", len(namespaced_topics))
     return namespaced_topics
