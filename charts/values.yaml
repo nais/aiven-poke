@@ -4,6 +4,7 @@
 
 slackWebhookURL: ""
 aivenToken: ""
+push_gateway_address: ""
 
 image:
   repository: ghcr.io/nais/aiven-poke

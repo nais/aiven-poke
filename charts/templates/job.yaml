@@ -16,5 +16,7 @@ spec:
   env:
     - name: MAIN_PROJECT
       value: "{{ .Values.aivenProject }}"
+    - name: PUSH_GATEWAY_ADDRESS
+      value: "{{ .Values.push_gateway_address }}"
   resources:
     {{- toYaml .Values.resources | nindent 4 }}
