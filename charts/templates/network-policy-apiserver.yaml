@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "aiven-poke.fullname" . }}
+  name: {{ include "aiven-poke.fullname" . }}-apiserver
   labels:
     {{- include "aiven-poke.labels" . | nindent 4 }}
 spec:

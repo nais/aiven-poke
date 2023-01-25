@@ -12,7 +12,7 @@ spec:
   readiness:
     path: /isReady
   envFrom:
-    - secret: aiven-poke # google secret, injected by hunter2
+    - secret: {{ include "aiven-poke.fullname" . }}
   env:
     - name: MAIN_PROJECT
       value: "{{ .Values.aivenProject }}"
