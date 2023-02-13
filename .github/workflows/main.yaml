@@ -54,7 +54,7 @@ jobs:
           EARTHLY_PUSH: "${{ github.ref == 'refs/heads/main' }}"
         run: |
           earthly --version
-          earthly --ci +docker --IMAGE_TAG="${IMAGE_TAG}" --BASEIMAGE="${IMAGE}"
+          earthly --verbose --ci +docker --IMAGE_TAG="${IMAGE_TAG}" --BASEIMAGE="${IMAGE}"
     outputs:
       image: "${{ steps.set-image-tag.outputs.image }}"
       image_tag: "${{ steps.set-image-tag.outputs.image_tag }}"
