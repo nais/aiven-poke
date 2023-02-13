@@ -12,7 +12,7 @@ on:
     - '.github/workflows/main.yaml'
 
 env:
-  REGISTRY: ghcr.io/nais
+  REGISTRY: ghcr.io/${{ github.repository }}
   IMAGE_NAME: aiven-poke
 
 jobs:
