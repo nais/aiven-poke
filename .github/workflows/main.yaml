@@ -60,17 +60,18 @@ jobs:
     outputs:
       image: "${{ steps.set-image-tag.outputs.image }}"
       image_tag: "${{ steps.set-image-tag.outputs.image_tag }}"
-  deploy-fasit:
-    name: Deploy to Fasit
-    if: github.ref == 'refs/heads/main'
-    runs-on: fasit-deploy
-    permissions:
-      contents: read
-      id-token: write
-    needs:
-      - build
-    steps:
-      - uses: nais/fasit-deploy@main
-        with:
-          json: '{"image": {"tag": "${{ needs.build.outputs.image_tag }}"}}'
-          feature_name: aiven-poke
+# XXX: Deploy to fasit doesn't work when feature is only available in legacy clusters because of no CI cluster
+#  deploy-fasit:
+#    name: Deploy to Fasit
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: fasit-deploy
+#    permissions:
+#      contents: read
+#      id-token: write
+#    needs:
+#      - build
+#    steps:
+#      - uses: nais/fasit-deploy@main
+#        with:
+#          json: '{"image": {"tag": "${{ needs.build.outputs.image_tag }}"}}'
+#          feature_name: aiven-poke
