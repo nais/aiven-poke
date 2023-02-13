@@ -16,7 +16,7 @@ requests-toolbelt = "^0.10.1"
 prometheus-client = "^0.16.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6"
+pytest = "^7"
 prospector = "^1"
 pytest-cov = "^3"
 pytest-sugar = "^0.9"
