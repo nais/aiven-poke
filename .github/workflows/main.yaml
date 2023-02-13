@@ -21,6 +21,7 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
+      packages: "write"
     steps:
       - name: Install earthly
         uses: earthly/actions-setup@v1
