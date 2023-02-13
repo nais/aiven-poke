@@ -7,7 +7,7 @@ aivenToken: ""
 push_gateway_address: ""
 
 image:
-  repository: ghcr.io/nais/aiven-poke
+  repository: europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "main"
