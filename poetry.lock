@@ -373,14 +373,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "k8s"
-version = "0.21.4"
+version = "0.22.0"
 description = "Python client library for the Kubernetes API"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "k8s-0.21.4-py2.py3-none-any.whl", hash = "sha256:ed44acb2e3d52cccc6876d672f9f15f4c135dbdc68abb48f73ebbafb468c702e"},
-    {file = "k8s-0.21.4.tar.gz", hash = "sha256:650820347971841cbb6fc1f08bcd55a9ad989c77f24605df71e0557b01a40d0d"},
+    {file = "k8s-0.22.0-py2.py3-none-any.whl", hash = "sha256:2cde030dd6dce21c0915bc823abb278baaed2f0002c5a38a75130988aff59bf3"},
+    {file = "k8s-0.22.0.tar.gz", hash = "sha256:cbcf657547769ec432246a6da6db553e3954bc097fd7becd2e3b59f80f5fbb89"},
 ]
 
 [package.dependencies]
@@ -1244,4 +1244,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "1adfbbe202d7c9fc77baec80fb91a740d12d3e761c3cdf68391b92c38c81e418"
+content-hash = "a006c6a3300c146f11afd9c254c201d1cfeb8deb4a7aa2a30cbbf7a42561a2ed"
