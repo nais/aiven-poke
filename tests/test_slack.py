@@ -1,6 +1,7 @@
 from unittest import mock
 
 import pytest
+from prometheus_client import Summary
 
 from aiven_poke.models import TeamTopic
 from aiven_poke.settings import Settings
@@ -23,5 +24,6 @@ class TestSlack:
         with mock.patch("aiven_poke.slack.SESSION") as m:
             settings = Settings(aiven_token="fake_token", webhook_url=WEBHOOK_URL)
             team_topic = TeamTopic("aura", "#channel", {"aura.test-topic", "aura.topic-test"})
-            post_payload(settings, payload, team_topic)
+            summary = Summary("slack_request_latency_seconds", "Slack requests latency")
+            post_payload(settings, payload, team_topic, summary)
             m.post.assert_called()

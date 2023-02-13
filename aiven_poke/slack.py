@@ -117,11 +117,10 @@ def create_payload(team_topic, main_project):
     ])
 
 
-def post_payload(settings, payload, team_topic):
+def post_payload(settings, payload, team_topic, summary):
     if settings.webhook_enabled and settings.webhook_url is not None:
         data = dataclasses.asdict(payload)
-        s = Summary("slack_request_latency_seconds", "Slack requests latency")
-        with s.time():
+        with summary.time():
             resp = SESSION.post(settings.webhook_url, json=data)
         if LOG.isEnabledFor(logging.DEBUG):
             dumped = dump.dump_all(resp).decode('utf-8')
@@ -135,9 +134,10 @@ def post_payload(settings, payload, team_topic):
 
 def poke(settings: Settings, missing: Iterable[TeamTopic]):
     """Poke the teams with topics missing in the cluster"""
+    summary = Summary("slack_request_latency_seconds", "Slack requests latency")
     for team_topic in missing:
         payload = create_payload(team_topic, settings.main_project)
-        post_payload(settings, payload, team_topic)
+        post_payload(settings, payload, team_topic, summary)
 
 
 if __name__ == '__main__':
