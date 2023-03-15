@@ -50,15 +50,16 @@ jobs:
           earthly --version
           earthly --verbose --ci +docker --IMAGE_TAG="${IMAGE_TAG}" --BASEIMAGE="${IMAGE}"
       - name: Install cosign
+        if: github.ref == 'refs/heads/main'
         uses: sigstore/cosign-installer@bd2d1189b064bcddc3903176a807dcdba72d7fd0 # ratchet:sigstore/cosign-installer@main
         with:
           cosign-release: 'v2.0.0'
       - name: Retrieve image digest
         id: imgdigest
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: echo "digest=$(docker inspect ${{ steps.set-image-tag.outputs.image }} | jq -r '.[].RepoDigests[0]')" >> $GITHUB_OUTPUT
       - name: Sign the container image
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: cosign sign --yes ${{ steps.imgdigest.outputs.digest }}
       - name: Create SBOM
         run: |
@@ -66,7 +67,7 @@ jobs:
           pip3 install cyclonedx-bom
           cyclonedx-py -p --format json -o sbom.json
       - name: Attest image
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: cosign attest --yes --predicate sbom.json --type cyclonedx ${{ steps.imgdigest.outputs.digest }}
     outputs:
       image: "${{ steps.set-image-tag.outputs.image }}"
