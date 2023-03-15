@@ -63,6 +63,7 @@ jobs:
       - name: Create SBOM
         run: |
           sudo apt-get update && sudo apt-get install -y python3-poetry
+          poetry self update
           poetry add cyclonedx-bom
           cyclonedx-py -p --format json -o sbom.json
       - name: Attest image
