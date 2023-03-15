@@ -62,7 +62,7 @@ jobs:
         run: cosign sign --yes ${{ steps.imgdigest.outputs.digest }}
       - name: Create SBOM
         run: |
-          apt-get update && apt-get install -y python3-poetry
+          sudo apt-get update && sudo apt-get install -y python3-poetry
           poetry add cyclonedx-bom
           cyclonedx-py -p --format json -o sbom.json
       - name: Attest image
