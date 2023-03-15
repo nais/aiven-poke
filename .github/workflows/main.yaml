@@ -62,9 +62,8 @@ jobs:
         run: cosign sign --yes ${{ steps.imgdigest.outputs.digest }}
       - name: Create SBOM
         run: |
-          sudo apt-get update && sudo apt-get install -y python3-poetry
-          poetry self update
-          poetry add cyclonedx-bom
+          sudo apt-get update && sudo apt-get install -y python3-pip
+          pip3 install cyclonedx-bom
           cyclonedx-py -p --format json -o sbom.json
       - name: Attest image
         if: github.ref == 'refs/heads/master'
