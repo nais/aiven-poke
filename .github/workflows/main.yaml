@@ -57,11 +57,14 @@ jobs:
       - name: Retrieve image digest
         id: imgdigest
         if: github.ref == 'refs/heads/main'
-        run: echo "digest=$(docker inspect ${{ steps.set-image-tag.outputs.image }} | jq -r '.[].RepoDigests[0]')" >> $GITHUB_OUTPUT
+        run: |
+          docker pull ${{ steps.set-image-tag.outputs.image }}
+          echo "digest=$(docker inspect ${{ steps.set-image-tag.outputs.image }} | jq -r '.[].RepoDigests[0]')" >> $GITHUB_OUTPUT
       - name: Sign the container image
         if: github.ref == 'refs/heads/main'
         run: cosign sign --yes ${{ steps.imgdigest.outputs.digest }}
       - name: Create SBOM
+        if: github.ref == 'refs/heads/main'
         run: |
           sudo apt-get update && sudo apt-get install -y python3-pip
           pip3 install cyclonedx-bom
