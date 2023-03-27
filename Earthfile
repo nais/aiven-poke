@@ -1,7 +1,6 @@
 VERSION 0.6
 
 ARG PY_VERSION=3.10
-ARG KUBECTL_VERSION=v1.19.13
 ARG BASEIMAGE=europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
 
 FROM busybox
