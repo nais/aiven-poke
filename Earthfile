@@ -42,8 +42,6 @@ test:
 
 docker:
     FROM navikt/python:${PY_VERSION}
-    ARG EARTHLY_GIT_SHORT_HASH
-    ARG IMAGE_TAG=$EARTHLY_GIT_SHORT_HASH
 
     WORKDIR /app
 
@@ -54,4 +52,6 @@ docker:
 
     CMD ["/app/.venv/bin/python", "-m", "aiven_poke"]
 
+    ARG EARTHLY_GIT_SHORT_HASH
+    ARG IMAGE_TAG=$EARTHLY_GIT_SHORT_HASH
     SAVE IMAGE --push ${BASEIMAGE}:${IMAGE_TAG} ${BASEIMAGE}:latest
