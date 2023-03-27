@@ -2,8 +2,7 @@ VERSION 0.6
 
 ARG PY_VERSION=3.9
 ARG KUBECTL_VERSION=v1.19.13
-ARG EARTHLY_GIT_PROJECT_NAME
-ARG BASEIMAGE=ghcr.io/$EARTHLY_GIT_PROJECT_NAME
+ARG BASEIMAGE=europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
 
 FROM busybox
 

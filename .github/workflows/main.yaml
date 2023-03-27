@@ -10,7 +10,12 @@ on:
       - '.prospector.yaml'
       - '.github/workflows/main.yaml'
 env:
-  REGISTRY: ghcr.io/${{ github.repository }}
+  REGISTRY: europe-north1-docker.pkg.dev/nais-io/nais/images
+  EARTHLY_USE_INLINE_CACHE: true
+  EARTHLY_SAVE_INLINE_CACHE: true
+  EARTHLY_VERBOSE: true
+  EARTHLY_FULL_TARGET: true
+  EARTHLY_OUTPUT: true
   IMAGE_NAME: aiven-poke
 jobs:
   build:
