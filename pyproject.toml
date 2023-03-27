@@ -6,7 +6,7 @@ authors = ["NAIS <aura@nav.no>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 Flask = "^2.2.3"
 fiaas-logging = "^0.1.1"
 k8s = "^0.22"
