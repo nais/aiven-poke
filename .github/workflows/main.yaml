@@ -33,12 +33,14 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # ratchet:actions/checkout@v3
       - id: "auth"
         name: "Authenticate to Google Cloud"
+        if: github.ref == 'refs/heads/main'
         uses: "google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d" # ratchet:google-github-actions/auth@v1.0.0
         with:
           workload_identity_provider: ${{ secrets.NAIS_IO_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: "gh-aiven-poke@nais-io.iam.gserviceaccount.com"
           token_format: "access_token"
       - name: Login to Google Artifact Registry
+        if: github.ref == 'refs/heads/main'
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # ratchet:docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
