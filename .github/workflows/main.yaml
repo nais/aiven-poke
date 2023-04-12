@@ -62,7 +62,7 @@ jobs:
           EARTHLY_PUSH: "${{ github.ref == 'refs/heads/main' }}"
         run: |
           earthly --version
-          earthly --verbose --ci +docker --IMAGE_TAG="${IMAGE_TAG}" --BASEIMAGE="${IMAGE}"
+          earthly --verbose +docker --IMAGE_TAG="${IMAGE_TAG}" --BASEIMAGE="${IMAGE}"
       - name: Install cosign
         if: github.ref == 'refs/heads/main'
         uses: sigstore/cosign-installer@9e9de2292db7abb3f51b7f4808d98f0d347a8919 # ratchet:sigstore/cosign-installer@main
