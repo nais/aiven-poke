@@ -26,7 +26,7 @@ jobs:
       packages: "write"
     steps:
       - name: Install earthly
-        uses: earthly/actions-setup@cce953f2ea75f5ff76f6483a788bac66a733de3a # ratchet:earthly/actions-setup@v1
+        uses: earthly/actions-setup@135d686cdc4619918fd1b542d0a08d61dd104518 # ratchet:earthly/actions-setup@v1
         with:
           version: "latest" # or pin to an specific version, e.g. "v0.6.10"
       - name: Checkout
