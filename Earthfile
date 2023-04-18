@@ -1,6 +1,6 @@
 VERSION 0.6
 
-ARG PY_VERSION=3.10
+ARG PY_VERSION=3.11
 ARG BASEIMAGE=europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
 
 FROM busybox
@@ -40,7 +40,7 @@ test:
         poetry run pytest
 
 docker:
-    FROM navikt/python:${PY_VERSION}
+    FROM cgr.dev/chainguard/python:${PY_VERSION}
 
     WORKDIR /app
 
@@ -48,8 +48,9 @@ docker:
     COPY --dir +build/aiven_poke .
 
     ENV PATH="/bin:/usr/bin:/usr/local/bin:/app/.venv/bin"
+    ENV PYTHONPATH=/app/.venv/lib/python${PY_VERSION}/site-packages
 
-    CMD ["/app/.venv/bin/python", "-m", "aiven_poke"]
+    ENTRYPOINT ["python", "-m", "aiven_poke"]
 
     ARG EARTHLY_GIT_SHORT_HASH
     ARG IMAGE_TAG=$EARTHLY_GIT_SHORT_HASH

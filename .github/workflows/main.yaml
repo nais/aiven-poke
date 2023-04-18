@@ -29,6 +29,13 @@ jobs:
         uses: earthly/actions-setup@135d686cdc4619918fd1b542d0a08d61dd104518 # ratchet:earthly/actions-setup@v1
         with:
           version: "latest" # or pin to an specific version, e.g. "v0.6.10"
+      - name: Install cosign
+        if: github.ref == 'refs/heads/main'
+        uses: sigstore/cosign-installer@9e9de2292db7abb3f51b7f4808d98f0d347a8919 # ratchet:sigstore/cosign-installer@main
+        with:
+          cosign-release: 'v2.0.0'
+      - name: Verify runner image
+        run: cosign verify --certificate-identity cgr.dev/chainguard/python:3.11 --certificate-oidc-issuer https://token.actions.githubusercontent.com cgr.dev/chainguard/python:3.11
       - name: Checkout
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # ratchet:actions/checkout@v3
       - id: "auth"
@@ -63,11 +70,6 @@ jobs:
         run: |
           earthly --version
           earthly --verbose +docker --IMAGE_TAG="${IMAGE_TAG}" --BASEIMAGE="${IMAGE}"
-      - name: Install cosign
-        if: github.ref == 'refs/heads/main'
-        uses: sigstore/cosign-installer@9e9de2292db7abb3f51b7f4808d98f0d347a8919 # ratchet:sigstore/cosign-installer@main
-        with:
-          cosign-release: 'v2.0.0'
       - name: Retrieve image digest
         id: imgdigest
         if: github.ref == 'refs/heads/main'
