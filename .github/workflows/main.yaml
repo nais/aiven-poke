@@ -35,7 +35,7 @@ jobs:
         with:
           cosign-release: 'v2.0.0'
       - name: Verify runner image
-        run: cosign verify --certificate-identity cgr.dev/chainguard/python:3.11 --certificate-oidc-issuer https://token.actions.githubusercontent.com cgr.dev/chainguard/python:3.11
+        run: cosign verify --certificate-identity https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main --certificate-oidc-issuer https://token.actions.githubusercontent.com cgr.dev/chainguard/python:3.11
       - name: Checkout
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # ratchet:actions/checkout@v3
       - id: "auth"
