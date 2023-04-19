@@ -30,7 +30,6 @@ jobs:
         with:
           version: "latest" # or pin to an specific version, e.g. "v0.6.10"
       - name: Install cosign
-        if: github.ref == 'refs/heads/main'
         uses: sigstore/cosign-installer@9e9de2292db7abb3f51b7f4808d98f0d347a8919 # ratchet:sigstore/cosign-installer@main
         with:
           cosign-release: 'v2.0.0'
