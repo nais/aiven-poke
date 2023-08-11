@@ -40,7 +40,7 @@ test:
         poetry run pytest
 
 docker:
-    FROM cgr.dev/chainguard/python:${PY_VERSION}
+    FROM python:${PY_VERSION}-slim
 
     WORKDIR /app
 
