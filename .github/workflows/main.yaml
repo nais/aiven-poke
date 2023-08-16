@@ -15,6 +15,7 @@ env:
   EARTHLY_FULL_TARGET: true
   EARTHLY_OUTPUT: true
   FEATURE: aiven-poke
+
 jobs:
   version:
     name: Version
@@ -153,6 +154,6 @@ jobs:
     steps:
       - uses: nais/fasit-deploy@badff0705af8a57bcf0ab172895273da09ae5959 # ratchet:nais/fasit-deploy@v2
         with:
-          chart: oci://${{ env.GOOGLE_REGISTRY }}/nais-io/nais/feature/${FEATURE}
+          chart: oci://${{ env.GOOGLE_REGISTRY }}/nais-io/nais/feature/${{ env.FEATURE }}
           version: ${{ needs.version.outputs.version }}
-          feature_name: ${FEATURE}
+          feature_name: ${{ env.FEATURE }}
