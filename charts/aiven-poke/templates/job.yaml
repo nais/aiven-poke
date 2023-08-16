@@ -18,5 +18,10 @@ spec:
       value: "{{ .Values.aivenProject }}"
     - name: PUSH_GATEWAY_ADDRESS
       value: "{{ .Values.push_gateway_address }}"
+  accessPolicy:
+    outbound:
+      external:
+        - host: api.aiven.io
+        - host: hooks.slack.com
   resources:
     {{- toYaml .Values.resources | nindent 4 }}
