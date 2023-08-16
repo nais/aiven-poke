@@ -1,0 +1,35 @@
+dependencies:
+  - allOf:
+      - naiserator
+      - aivenator
+environmentKinds:
+  - legacy
+values:
+  aivenProject:
+    description: Which aiven project to look for topics in
+    displayName: aiven project
+    computed:
+      template: '"{{ .Env.aiven_project }}"'
+  aivenToken:
+    config:
+      type: string
+      secret: true
+  image.pullPolicy:
+    config:
+      type: string
+  image.repository:
+    config:
+      type: string
+  image.tag:
+    config:
+      type: string
+  push_gateway_address:
+    config:
+      type: string
+  schedule:
+    config:
+      type: string
+  slackWebhookURL:
+    config:
+      type: string
+      secret: true
