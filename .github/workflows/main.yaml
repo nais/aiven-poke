@@ -1,25 +1,37 @@
 name: Create docker image
+
 on:
   push:
-    paths:
-      - 'aiven_poke/**'
-      - 'tests/**'
-      - 'Earthfile'
-      - 'pyproject.toml'
-      - 'poetry.lock'
-      - '.prospector.yaml'
-      - '.github/workflows/*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
-  REGISTRY: europe-north1-docker.pkg.dev/nais-io/nais/images
+  GOOGLE_REGISTRY: europe-north1-docker.pkg.dev
   EARTHLY_USE_INLINE_CACHE: true
   EARTHLY_SAVE_INLINE_CACHE: true
   EARTHLY_VERBOSE: true
   EARTHLY_FULL_TARGET: true
   EARTHLY_OUTPUT: true
-  IMAGE_NAME: aiven-poke
+  FEATURE: aiven-poke
 jobs:
+  version:
+    name: Version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # ratchet:actions/checkout@v3
+      - name: Generate image environment variable
+        id: set-image-tag
+        run: |
+          version="$(date +%Y%m%d%H%M%S)-$(git describe --always --dirty --exclude '*')"
+          echo "version=${version}" >> $GITHUB_OUTPUT
+    outputs:
+      version: ${{ steps.set-image-tag.outputs.version }}
   build:
     runs-on: ubuntu-latest
+    needs:
+      - version
     permissions:
       contents: "read"
       id-token: "write"
@@ -49,20 +61,17 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # ratchet:docker/login-action@v2
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.GOOGLE_REGISTRY }}
           username: "oauth2accesstoken"
           password: "${{ steps.auth.outputs.access_token }}"
       - name: "Set image tag"
         id: set-image-tag
         run: |
-          export IMAGE_TAG="$(date +%Y%m%d%H%M%S)-$(git describe --always --dirty --exclude '*')"
+          export IMAGE_TAG="${{ needs.version.outputs.version }}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> ${GITHUB_ENV}
-          echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
 
-          export IMAGE="${REGISTRY}/${IMAGE_NAME}"
+          export IMAGE="${REGISTRY}/nais-io/nais/images/${FEATURE}"
           echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
-
-          echo "image=${IMAGE}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
       - name: Build and possibly push
         env:
           EARTHLY_PUSH: "${{ github.ref == 'refs/heads/main' }}"
@@ -73,8 +82,8 @@ jobs:
         id: imgdigest
         if: github.ref == 'refs/heads/main'
         run: |
-          docker pull ${{ steps.set-image-tag.outputs.image }}
-          echo "digest=$(docker inspect ${{ steps.set-image-tag.outputs.image }} | jq -r '.[].RepoDigests[0]')" >> $GITHUB_OUTPUT
+          docker pull ${IMAGE}:${IMAGE_TAG}
+          echo "digest=$(docker inspect ${IMAGE}:${IMAGE_TAG} | jq -r '.[].RepoDigests[0]')" >> $GITHUB_OUTPUT
       - name: Sign the container image
         if: github.ref == 'refs/heads/main'
         run: cosign sign --yes ${{ steps.imgdigest.outputs.digest }}
@@ -87,21 +96,63 @@ jobs:
       - name: Attest image
         if: github.ref == 'refs/heads/main'
         run: cosign attest --yes --predicate sbom.json --type cyclonedx ${{ steps.imgdigest.outputs.digest }}
-    outputs:
-      image: "${{ steps.set-image-tag.outputs.image }}"
-      image_tag: "${{ steps.set-image-tag.outputs.image_tag }}"
-# XXX: Deploy to fasit doesn't work when feature is only available in legacy clusters because of no CI cluster
-#  deploy-fasit:
-#    name: Deploy to Fasit
-#    if: github.ref == 'refs/heads/main'
-#    runs-on: fasit-deploy
-#    permissions:
-#      contents: read
-#      id-token: write
-#    needs:
-#      - build
-#    steps:
-#      - uses: nais/fasit-deploy@main
-#        with:
-#          json: '{"image": {"tag": "${{ needs.build.outputs.image_tag }}"}}'
-#          feature_name: aiven-poke
+
+  chart:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    name: Build and push chart
+    runs-on: ubuntu-latest
+    needs:
+      - version
+    steps:
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # ratchet:actions/checkout@v3
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033' # ratchet:google-github-actions/auth@v1.1.1
+        with:
+          workload_identity_provider: ${{ secrets.NAIS_IO_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: 'gh-aiven-poke@nais-io.iam.gserviceaccount.com'
+          token_format: 'access_token'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@e30db14379863a8c79331b04a9969f4c1e225e0b' # ratchet:google-github-actions/setup-gcloud@v1
+      - name: 'Log in to Google Artifact Registry'
+        run: |-
+          echo '${{ steps.auth.outputs.access_token }}' | docker login -u oauth2accesstoken --password-stdin https://${{ env.GOOGLE_REGISTRY }}
+      - uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # ratchet:azure/setup-helm@v3
+        name: 'Setup Helm'
+        with:
+          version: '3.8.0'
+      - name: Set versions
+        run: |-
+          for chart in charts/*; do
+            yq e '.version = "${{ needs.version.outputs.version }}"' --inplace "${chart}/Chart.yaml"
+            yq e '.image.tag = "${{ needs.version.outputs.version }}"' --inplace "${chart}/values.yaml"
+          done
+      - name: Build Chart
+        run: |-
+          for chart in charts/*; do
+            helm package "$chart"
+          done
+      - name: Push Chart
+        run: |-
+          for chart in *.tgz; do
+            helm push "$chart" oci://${{ env.GOOGLE_REGISTRY }}/nais-io/nais/feature
+          done
+
+  rollout:
+    name: Rollout
+    if: github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main'
+    needs:
+      - version
+      - build
+      - chart
+    runs-on: fasit-deploy
+    permissions:
+      id-token: write
+    steps:
+      - uses: nais/fasit-deploy@badff0705af8a57bcf0ab172895273da09ae5959 # ratchet:nais/fasit-deploy@v2
+        with:
+          chart: oci://${{ env.GOOGLE_REGISTRY }}/nais-io/nais/feature/${FEATURE}
+          version: ${{ needs.version.outputs.version }}
+          feature_name: ${FEATURE}
