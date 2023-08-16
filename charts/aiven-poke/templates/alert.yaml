@@ -16,4 +16,8 @@ spec:
             description: "Job is scheduled to run every week, and is responsible for poking teams with Aiven related issues."
             action: "Check if Job has run successfully:\n- `kubectl describe cronjob -n {{ .Release.Namespace }} {{ include "aiven-poke.fullname" . }}`\n- `kubectl describe pod -l app={{ include "aiven-poke.fullname" . }}`\n- `kubectl logs -l app={{ include "aiven-poke.fullname" . }} --tail=1000`"
             sla: respond within office hours
+          labels:
             severity: warning
+            feature: aiven-poke
+            cluster: "{{ .Values.clusterName }}"
+            namespace: nais-system
