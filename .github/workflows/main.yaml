@@ -70,7 +70,7 @@ jobs:
           export IMAGE_TAG="${{ needs.version.outputs.version }}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> ${GITHUB_ENV}
 
-          export IMAGE="${REGISTRY}/nais-io/nais/images/${FEATURE}"
+          export IMAGE="${GOOGLE_REGISTRY}/nais-io/nais/images/${FEATURE}"
           echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
       - name: Build and possibly push
         env:
