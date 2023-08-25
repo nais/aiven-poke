@@ -8,8 +8,7 @@ from k8s.models.common import ObjectMeta
 from k8s.models.namespace import Namespace
 from prometheus_client import Summary
 
-SLACK_CHANNEL = "slack-channel"
-PLATFORM_ALERTS_CHANNEL = "platform-alerts-channel"
+SLACK_CHANNEL_KEY = "replicator.nais.io/slackAlertsChannel"
 
 LOG = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ def init_k8s_client(api_server):
 def get_slack_channel(team):
     namespace = Namespace.get(team)
     annotations = namespace.metadata.annotations
-    slack_channel = annotations.get(PLATFORM_ALERTS_CHANNEL, annotations.get(SLACK_CHANNEL))
+    slack_channel = annotations.get(SLACK_CHANNEL_KEY)
     if not slack_channel.startswith("#"):
         return f"#{slack_channel}"
     return slack_channel
