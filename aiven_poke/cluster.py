@@ -45,6 +45,9 @@ def get_slack_channel(team):
     namespace = Namespace.get(team)
     annotations = namespace.metadata.annotations
     slack_channel = annotations.get(SLACK_CHANNEL_KEY)
+    if not slack_channel:
+        LOG.error("Team %s has no slack channel set, directing poke to #nais-alerts-info", team)
+        return "#nais-alerts-info"
     if not slack_channel.startswith("#"):
         return f"#{slack_channel}"
     return slack_channel
