@@ -45,7 +45,7 @@ jobs:
       - name: Install cosign
         uses: sigstore/cosign-installer@1fc5bd396d372bee37d608f955b336615edf79c8 # ratchet:sigstore/cosign-installer@main
         with:
-          cosign-release: 'v2.0.0'
+          cosign-release: 'v2.2.1'
       - name: Checkout
         uses: actions/checkout@v4 # ratchet:actions/checkout@v3
       - id: "auth"
