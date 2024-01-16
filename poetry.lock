@@ -375,13 +375,13 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "k8s"
-version = "0.23.4"
+version = "0.24.1"
 description = "Python client library for the Kubernetes API"
 optional = false
 python-versions = "*"
 files = [
-    {file = "k8s-0.23.4-py2.py3-none-any.whl", hash = "sha256:bdb0dffe5a3b235b0bf7012280adac7670052f4ae87b067e86ebb5cf49976bbb"},
-    {file = "k8s-0.23.4.tar.gz", hash = "sha256:d85af8d30f093bf56fe78ea0464dcb72aaf0af361ebd11f8fab46d562baf001e"},
+    {file = "k8s-0.24.1-py2.py3-none-any.whl", hash = "sha256:65ef7cd103f92bf671b3bfecbb21fd45bf2307e9f5972758d6e1fb2cea4a8744"},
+    {file = "k8s-0.24.1.tar.gz", hash = "sha256:84dd0ad122b501e71dad1f452feb5f797401519f5db855773d82f8356c859df4"},
 ]
 
 [package.dependencies]
@@ -1351,4 +1351,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "03197e5e808decd296fb40865854c82a9d7ce8083c716d780f443e9f85ed369b"
+content-hash = "a851d9e94ac016f4799ee90f3502224ca72f3a0572452794ef4794b4e1a229cb"
