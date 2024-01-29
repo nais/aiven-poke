@@ -4,6 +4,7 @@ dependencies:
       - aivenator
 environmentKinds:
   - legacy
+  - tenant
 values:
   aivenProject:
     description: Which aiven project to look for topics in
