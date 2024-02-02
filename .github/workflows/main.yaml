@@ -91,7 +91,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y python3-pip
           pip3 install cyclonedx-bom
-          cyclonedx-py -p --format json -o sbom.json
+          cyclonedx-py poetry -o sbom.json
       - name: Attest image
         if: github.ref == 'refs/heads/main'
         run: cosign attest --yes --predicate sbom.json --type cyclonedx ${{ steps.imgdigest.outputs.digest }}
