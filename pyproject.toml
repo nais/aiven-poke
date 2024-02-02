@@ -6,7 +6,7 @@ authors = ["NAIS <aura@nav.no>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 Flask = "^3.0.1"
 fiaas-logging = "^0.1.1"
 k8s = "^0.24.2"
@@ -21,6 +21,9 @@ pytest = "^8"
 prospector = "^1"
 pytest-cov = "^4"
 pytest-sugar = "^1.0"
+
+[tool.poetry.group.sbom-tools.dependencies]
+cyclonedx-bom = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

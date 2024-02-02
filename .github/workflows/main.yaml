@@ -86,12 +86,17 @@ jobs:
       - name: Sign the container image
         if: github.ref == 'refs/heads/main'
         run: cosign sign --yes ${{ steps.imgdigest.outputs.digest }}
+      - name: "Setup Python, Poetry and Dependencies"
+        if: github.ref == 'refs/heads/main'
+        uses: packetcoders/action-setup-cache-python-poetry@main
+        with:
+          python-version: 3.11
+          poetry-version: 1.5.1
+          install-args: --only=sbom-tools
       - name: Create SBOM
         if: github.ref == 'refs/heads/main'
         run: |
-          sudo apt-get update && sudo apt-get install -y python3-pip
-          pip3 install cyclonedx-bom
-          cyclonedx-py poetry -o sbom.json
+          poetry run cyclonedx-py poetry -o sbom.json
       - name: Attest image
         if: github.ref == 'refs/heads/main'
         run: cosign attest --yes --predicate sbom.json --type cyclonedx ${{ steps.imgdigest.outputs.digest }}
