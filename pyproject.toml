@@ -14,7 +14,7 @@ pydantic = "^2.6.1"
 requests = "^2"
 requests-toolbelt = "^1.0.0"
 prometheus-client = "^0.20.0"
-pydantic-settings = "^2.1.0"
+pydantic-settings = "^2.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8"
