@@ -14,7 +14,7 @@ deps:
     ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
     COPY pyproject.toml poetry.lock .
-    RUN poetry install --no-dev --no-root --no-interaction
+    RUN poetry install --only main --no-root --no-interaction
 
     SAVE ARTIFACT .venv
     SAVE IMAGE --cache-hint
