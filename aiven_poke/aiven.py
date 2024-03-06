@@ -55,6 +55,10 @@ class AivenKafka():
             resp = self.session.get(f"{self.base_url}/topic")
         resp.raise_for_status()
         data = resp.json()
+        return self._parse_topics(data)
+
+    @staticmethod
+    def _parse_topics(data):
         topics = []
         for t in data["topics"]:
             topic = Topic(**t)
