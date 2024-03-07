@@ -2,8 +2,10 @@ from unittest import mock
 
 import pytest
 
+from aiven_poke.cluster import Cluster
 from aiven_poke.main import compare
 from aiven_poke.models import TeamTopic
+from aiven_poke.settings import Settings
 
 
 class TestCompare:
@@ -34,7 +36,8 @@ class TestCompare:
         }
 
     def test_compare(self, aiven_topics, cluster_topics, expected):
-        with mock.patch("aiven_poke.main.get_slack_channel") as m:
-            m.side_effect = lambda t: f"#{t}"
-            actual = compare(aiven_topics, cluster_topics)
-            assert actual == expected
+        settings = Settings(aiven_token="fake_token")
+        cluster = mock.create_autospec(Cluster(settings))
+        cluster.get_slack_channel.side_effect = lambda t: f"#{t}"
+        actual = compare(cluster, aiven_topics, cluster_topics)
+        assert actual == expected

@@ -41,33 +41,38 @@ def init_k8s_client(api_server):
         config.api_server = api_server
 
 
-@functools.lru_cache
-def get_slack_channel(team):
-    try:
-        namespace = Namespace.get(team)
-    except NotFound:
-        if not team.startswith("team"):
-            return get_slack_channel("team"+team)
-        if not team.startswith("team-"):
-            return get_slack_channel("team-"+team[4:])
-    annotations = namespace.metadata.annotations
-    slack_channel = annotations.get(SLACK_CHANNEL_KEY)
-    if not slack_channel:
-        LOG.error("Team %s has no slack channel set, directing poke to #nais-alerts-info", team)
-        return "#nais-alerts-info"
-    if not slack_channel.startswith("#"):
-        return f"#{slack_channel}"
-    return slack_channel
+class Cluster:
+    def __init__(self, settings):
+        init_k8s_client(settings.api_server)
+        self._settings = settings
+        self._latency = Summary("k8s_latency_seconds", "Kubernetes latency", ["action", "resource"])
 
+    @functools.lru_cache
+    def get_slack_channel(self, team):
+        try:
+            with self._latency.labels("get", "namespace").time():
+                namespace = Namespace.get(team)
+        except NotFound:
+            if not team.startswith("team"):
+                return self.get_slack_channel("team" + team)
+            if not team.startswith("team-"):
+                return self.get_slack_channel("team-" + team[4:])
+        annotations = namespace.metadata.annotations
+        slack_channel = annotations.get(SLACK_CHANNEL_KEY)
+        if not slack_channel:
+            LOG.error("Team %s has no slack channel set, directing poke to #nais-alerts-info", team)
+            return "#nais-alerts-info"
+        if not slack_channel.startswith("#"):
+            return f"#{slack_channel}"
+        return slack_channel
 
-def get_cluster_topics(settings, gauge):
-    s = Summary("k8s_latency_seconds", "Kubernetes latency", ["action", "resource"])
-    with s.labels("list", "topic").time():
-        cluster_topics = Topic.list(namespace=None)
-    namespaced_topics = defaultdict(set)
-    for topic in cluster_topics:
-        if topic.spec.pool == settings.main_project:
-            namespaced_topics[topic.metadata.namespace].add(f"{topic.metadata.namespace}.{topic.metadata.name}")
-            gauge.inc()
-    LOG.info("%d namespaces with topics found in cluster", len(namespaced_topics))
-    return namespaced_topics
+    def get_cluster_topics(self, gauge):
+        with self._latency.labels("list", "topic").time():
+            cluster_topics = Topic.list(namespace=None)
+        namespaced_topics = defaultdict(set)
+        for topic in cluster_topics:
+            if topic.spec.pool == self._settings.main_project:
+                namespaced_topics[topic.metadata.namespace].add(f"{topic.metadata.namespace}.{topic.metadata.name}")
+                gauge.inc()
+        LOG.info("%d namespaces with topics found in cluster", len(namespaced_topics))
+        return namespaced_topics

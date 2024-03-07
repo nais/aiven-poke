@@ -9,7 +9,7 @@ from fiaas_logging import init_logging
 from prometheus_client import push_to_gateway, REGISTRY, generate_latest, Gauge
 
 from aiven_poke.aiven import AivenKafka
-from aiven_poke.cluster import init_k8s_client, get_cluster_topics, get_slack_channel
+from aiven_poke.cluster import Cluster
 from aiven_poke.endpoints import start_server
 from aiven_poke.models import TeamTopic
 from aiven_poke.settings import Settings
@@ -22,17 +22,17 @@ class ExitOnSignal(Exception):
     pass
 
 
-def signal_handler(signum, frame):
+def signal_handler(_signum, _frame):
     raise ExitOnSignal()
 
 
-def compare(aiven_topics, cluster_topics):
+def compare(cluster, aiven_topics, cluster_topics):
     result = set()
     for team, topics in aiven_topics.items():
         in_cluster = cluster_topics[team]
         missing = topics - in_cluster
         if missing:
-            team_topic = TeamTopic(team, get_slack_channel(team), missing)
+            team_topic = TeamTopic(team, cluster.get_slack_channel(team), missing)
             result.add(team_topic)
     LOG.info("%d teams with topics on Aiven missing in cluster", len(result))
     return result
@@ -49,7 +49,7 @@ def _init_logging():
 def main():
     _init_logging()
     settings = Settings()
-    init_k8s_client(settings.api_server)
+    cluster = Cluster(settings)
     server = start_server()
     exit_code = 0
     try:
@@ -65,9 +65,9 @@ def main():
             aiven = AivenKafka(settings.aiven_token.get_secret_value(), settings.main_project)
             poke = Poke(settings)
             if settings.topics_enabled:
-                handle_topics(aiven, poke, settings, team_gauge, topic_gauge)
+                handle_topics(aiven, poke, cluster, team_gauge, topic_gauge)
             if settings.expiring_users_enabled:
-                handle_expiring_users(aiven, poke, expiring_users_gauge)
+                handle_expiring_users(aiven, poke, cluster, expiring_users_gauge)
 
             if settings.push_gateway_address:
                 push_to_gateway(settings.push_gateway_address, job='aiven-poke', registry=REGISTRY)
@@ -83,7 +83,7 @@ def main():
     sys.exit(exit_code)
 
 
-def handle_expiring_users(aiven, poke, expiring_users_gauge):
+def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
     users = aiven.get_users()
     expiring_users_per_team = defaultdict(list)
     count = 0
@@ -94,18 +94,18 @@ def handle_expiring_users(aiven, poke, expiring_users_gauge):
         count += 1
     expiring_users_gauge.set(count)
 
-    slack_channels_per_team = {team: get_slack_channel(team) for team in expiring_users_per_team.keys()}
+    slack_channels_per_team = {team: cluster.get_slack_channel(team) for team in expiring_users_per_team.keys()}
 
     poke.users(expiring_users_per_team, slack_channels_per_team)
     LOG.info("Completed poking about expiring users")
 
 
-def handle_topics(aiven, poke, settings, team_gauge, topic_gauge):
+def handle_topics(aiven, poke, cluster, team_gauge, topic_gauge):
     aiven_topics = aiven.get_team_topics(topic_gauge.labels("aiven"))
     team_gauge.labels("aiven").set(len(aiven_topics))
-    cluster_topics = get_cluster_topics(settings, topic_gauge.labels("cluster"))
+    cluster_topics = cluster.get_cluster_topics(topic_gauge.labels("cluster"))
     team_gauge.labels("cluster").set(len(cluster_topics))
-    missing_in_cluster = compare(aiven_topics, cluster_topics)
+    missing_in_cluster = compare(cluster, aiven_topics, cluster_topics)
     team_gauge.labels("missing").set(len(missing_in_cluster))
     poke.topics(missing_in_cluster)
     LOG.info("Completed poking about topics")
