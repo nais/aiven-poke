@@ -3,7 +3,8 @@ from unittest import mock
 import pytest
 
 from aiven_poke.settings import Settings
-from aiven_poke.slack import Attachment, Color, Divider, Header, Payload, Poke, Text, TextType
+from aiven_poke.slack import Attachment, Color, Header, Payload, Poke, Text, TextType
+from aiven_poke.slack.payload import Divider
 
 WEBHOOK_URL = "https://example.com"
 
