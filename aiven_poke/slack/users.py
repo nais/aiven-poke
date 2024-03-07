@@ -4,27 +4,28 @@ from .payload import Payload, Attachment, Color, Header, Text, TextType, TextSec
 
 RENEW_DOC = "https://doc.nais.io/how-to-guides/persistence/kafka/renew-credentials-for-non-nais/"
 
-FALLBACK = " ".join(textwrap.dedent("""
+FALLBACK = " ".join(textwrap.dedent("""\
     Your team has users with expiring credentials in the {main_project} pool.
     Consult the nais documentation to find out how to fix these.
-    The following users needs attention:\n\n 
-"""))
+    The following users needs attention:
+    {usernames} 
+""").splitlines())
 MAIN_HEADER = "Your team has users in Kafka with expiring credentials"
-WHAT_IS_THIS = " ".join(textwrap.dedent("""
+WHAT_IS_THIS = " ".join(textwrap.dedent("""\
     Kafka service users are issued certificates with a limited lifespan.
     When the certificates are getting close to expiring, warnings are issued to avoid interruptions in service.
     The applications using the affected users needs to get new credentials before the expiry date.
 """).splitlines())
 USERS_HEADER = "*Found service users in the {main_project} pool belonging to team `{team}` with expiring credentials*"
 SOLUTION_HEADER = "*Solution*"
-SOLUTION_PROTECTED = " ".join(textwrap.dedent(f"""
+SOLUTION_PROTECTED = " ".join(textwrap.dedent(f"""\
     For users used by legacy applications not running in the nais platform, consult the documentation on
     <{RENEW_DOC}|how to renew credentials for non-nais>.
 """).splitlines())
-SOLUTION_NAIS_APP = " ".join(textwrap.dedent("""
+SOLUTION_NAIS_APP = " ".join(textwrap.dedent("""\
     For users used by applications running in the nais platform, a simple redeploy of your application should be enough.
 """).splitlines())
-NEEDS_HELP = " ".join(textwrap.dedent("""
+NEEDS_HELP = " ".join(textwrap.dedent("""\
     If you need help, reach out in <#C5KUST8N6|nais>
 """).splitlines())
 
@@ -32,12 +33,13 @@ NEEDS_HELP = " ".join(textwrap.dedent("""
 def create_user_payload(team, channel, users, main_project):
     users_header = USERS_HEADER.format(main_project=main_project, team=team)
     usernames = [user.username for user in users]
+    fallback_text = FALLBACK.format(main_project=main_project, usernames="\n* ".join(usernames))
     return Payload(channel, attachments=[
-        Attachment(Color.WARNING, FALLBACK + ", ".join(usernames), blocks=[
+        Attachment(Color.WARNING, fallback_text, blocks=[
             Header(Text(TextType.PLAIN, MAIN_HEADER)),
             TextSection(Text(TextType.MRKDWN, WHAT_IS_THIS)),
             TextSection(Text(TextType.MRKDWN, users_header)),
-            FieldsSection(usernames),
+            FieldsSection([Text(TextType.MRKDWN, "`{}`".format(u)) for u in usernames]),
             TextSection(Text(TextType.MRKDWN, SOLUTION_HEADER)),
             TextSection(Text(TextType.MRKDWN, SOLUTION_PROTECTED.format(team=team))),
             TextSection(Text(TextType.MRKDWN, SOLUTION_NAIS_APP.format(team=team))),
