@@ -9,7 +9,6 @@ from requests_toolbelt.utils import dump
 from aiven_poke.aiven import User
 from aiven_poke.models import TeamTopic
 from aiven_poke.settings import Settings
-from aiven_poke.slack.payload import Color, TextType, Text, Header, TextSection, FieldsSection, Attachment, Payload
 from aiven_poke.slack.topics import create_topic_payload
 from aiven_poke.slack.users import create_user_payload
 

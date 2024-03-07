@@ -1,7 +1,6 @@
 import textwrap
 
-from aiven_poke.slack import Payload, Attachment, Color, Header, Text, TextType, TextSection, \
-    FieldsSection
+from .payload import Payload, Attachment, Color, Header, Text, TextType, TextSection, FieldsSection
 
 RENEW_DOC = "https://doc.nais.io/how-to-guides/persistence/kafka/renew-credentials-for-non-nais/"
 
