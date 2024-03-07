@@ -17,14 +17,15 @@ SESSION = requests.session()
 
 
 class Poke:
-    def __init__(self, settings: Settings):
-        self.settings = settings
+    def __init__(self, settings: Settings, cluster_name):
+        self._cluster_name = cluster_name
+        self._settings = settings
         self._latency = Summary("slack_request_latency_seconds", "Slack requests latency")
 
     def topics(self, missing: Iterable[TeamTopic]):
         """Poke the teams with topics missing in the cluster"""
         for team_topic in missing:
-            payload = create_topic_payload(team_topic, self.settings.main_project)
+            payload = create_topic_payload(team_topic, self._settings.main_project)
             self.post_payload(payload)
             channel = team_topic.slack_channel
             topics = ", ".join(team_topic.topics)
@@ -34,16 +35,16 @@ class Poke:
         """Poke the teams with users with expiring credentials"""
         for team, users in expiring_users.items():
             channel = slack_channels[team]
-            payload = create_user_payload(team, channel, users, self.settings.main_project)
+            payload = create_user_payload(team, channel, users, self._settings.main_project, self._cluster_name)
             self.post_payload(payload)
             usernames = ", ".join(user.username for user in users)
             LOG.info("Notified %s about expiring users: %s", channel, usernames)
 
     def post_payload(self, payload):
-        if self.settings.webhook_enabled and self.settings.webhook_url is not None:
+        if self._settings.webhook_enabled and self._settings.webhook_url is not None:
             data = dataclasses.asdict(payload)
             with self._latency.time():
-                resp = SESSION.post(self.settings.webhook_url, json=data)
+                resp = SESSION.post(self._settings.webhook_url, json=data)
             if LOG.isEnabledFor(logging.DEBUG):
                 dumped = dump.dump_all(resp).decode('utf-8')
                 LOG.debug(dumped)
@@ -53,6 +54,7 @@ class Poke:
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    tt = TeamTopic("aura", "#pig-aiven", frozenset(("aura.test-topic", "aura.topic-test", "aura.probably-a-test-too")))
-    poke = Poke(Settings())
+    tt = TeamTopic("nais", "#jk-tullekanal",
+                   frozenset(("nais.test-topic", "nais.topic-test", "nais.probably-a-test-too")))
+    poke = Poke(Settings(), "test")
     poke.topics([tt])

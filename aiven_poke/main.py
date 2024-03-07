@@ -11,7 +11,7 @@ from prometheus_client import push_to_gateway, REGISTRY, generate_latest, Gauge
 from aiven_poke.aiven import AivenKafka
 from aiven_poke.cluster import Cluster
 from aiven_poke.endpoints import start_server
-from aiven_poke.models import TeamTopic
+from aiven_poke.models import TeamTopic, ExpiringUser
 from aiven_poke.settings import Settings
 from aiven_poke.slack import Poke
 
@@ -50,6 +50,7 @@ def main():
     _init_logging()
     settings = Settings()
     cluster = Cluster(settings)
+    cluster_name = os.getenv("NAIS_CLUSTER_NAME", "unknown")
     server = start_server()
     exit_code = 0
     try:
@@ -60,14 +61,14 @@ def main():
             topic_gauge = Gauge("number_of_topics", "Number of topics found", ["source"])
             team_gauge = Gauge("number_of_teams", "Number of teams with topics", ["source"])
             expiring_users_gauge = Gauge("number_of_expiring_users",
-                                         "Number of service users with expiring credentials")
+                                         "Number of service users with expiring credentials", ["cluster"])
 
             aiven = AivenKafka(settings.aiven_token.get_secret_value(), settings.main_project)
-            poke = Poke(settings)
+            poke = Poke(settings, cluster_name)
             if settings.topics_enabled:
                 handle_topics(aiven, poke, cluster, team_gauge, topic_gauge)
             if settings.expiring_users_enabled:
-                handle_expiring_users(aiven, poke, cluster, expiring_users_gauge)
+                handle_expiring_users(aiven, poke, cluster, expiring_users_gauge.labels(cluster_name))
 
             if settings.push_gateway_address:
                 push_to_gateway(settings.push_gateway_address, job='aiven-poke', registry=REGISTRY)
@@ -83,6 +84,10 @@ def main():
     sys.exit(exit_code)
 
 
+def _is_secret_protected(secret):
+    return secret.metadata.annotations.get("aivenator.aiven.nais.io/protected") == "true"
+
+
 def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
     users = aiven.get_users()
     expiring_users_per_team = defaultdict(list)
@@ -90,7 +95,13 @@ def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
     for user in users:
         if user.expiring_cert_not_valid_after_time is None:
             continue
-        expiring_users_per_team[user.team].append(user)
+        aiven_secrets = cluster.get_aiven_secrets_by_name(user.team)
+        secret = aiven_secrets.get(user.username)
+        if not secret:
+            continue
+        expiring_user = ExpiringUser(user.team, user.username, _is_secret_protected(secret),
+                                     user.expiring_cert_not_valid_after_time)
+        expiring_users_per_team[user.team].append(expiring_user)
         count += 1
     expiring_users_gauge.set(count)
 
