@@ -12,6 +12,6 @@ class Settings(BaseSettings):
     webhook_enabled: bool = True
     push_gateway_address: Optional[str] = None
     expiring_users_enabled: bool = False
-    topics_enabled: bool = True
+    topics_enabled: bool = False
     override_slack_channel: Optional[str] = None
 

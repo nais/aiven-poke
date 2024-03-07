@@ -5,12 +5,18 @@ dependencies:
 environmentKinds:
   - legacy
   - tenant
+  - onprem
 values:
   aivenProject:
-    description: Which aiven project to look for topics in
+    description: Which aiven project to look for topics and users in
     displayName: aiven project
     computed:
       template: '"{{ .Env.aiven_project }}"'
+  enableTopics:
+    description: Should we poke teams about expiring users
+    computed:
+      template: |
+        {{ ne .Env.kind "onprem" }}
   aivenToken:
     config:
       type: string
