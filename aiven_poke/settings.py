@@ -13,3 +13,5 @@ class Settings(BaseSettings):
     push_gateway_address: Optional[str] = None
     expiring_users_enabled: bool = False
     topics_enabled: bool = True
+    override_slack_channel: Optional[str] = None
+

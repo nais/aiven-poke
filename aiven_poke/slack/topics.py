@@ -1,3 +1,4 @@
+import itertools
 import textwrap
 
 from .payload import Text, TextType, Payload, Attachment, Color, Header, TextSection, FieldsSection
@@ -26,14 +27,18 @@ FALLBACK = "Your team has topics on Aiven which are not found in a nais cluster.
 def create_topic_payload(team_topic, main_project):
     topic_header = TOPIC_HEADER.format(main_project=main_project, namespace=team_topic.team)
     topics = [Text(TextType.MRKDWN, "`{}`".format(topic.split(".", maxsplit=1)[-1])) for topic in team_topic.topics]
+    blocks = [
+        Header(Text(TextType.PLAIN, MAIN_HEADER)),
+        TextSection(Text(TextType.MRKDWN, WHAT_IS_THIS)),
+        TextSection(Text(TextType.MRKDWN, topic_header)),
+    ]
+    for collection in itertools.batched(topics, 10):
+        blocks.append(FieldsSection(collection))
+    blocks.extend([
+        TextSection(Text(TextType.MRKDWN, SOLUTION_HEADER)),
+        TextSection(Text(TextType.MRKDWN, SOLUTION1.format(team=team_topic.team))),
+        TextSection(Text(TextType.MRKDWN, SOLUTION2)),
+    ])
     return Payload(team_topic.slack_channel, attachments=[
-        Attachment(Color.WARNING, FALLBACK, blocks=[
-            Header(Text(TextType.PLAIN, MAIN_HEADER)),
-            TextSection(Text(TextType.MRKDWN, WHAT_IS_THIS)),
-            TextSection(Text(TextType.MRKDWN, topic_header)),
-            FieldsSection(topics),
-            TextSection(Text(TextType.MRKDWN, SOLUTION_HEADER)),
-            TextSection(Text(TextType.MRKDWN, SOLUTION1.format(team=team_topic.team))),
-            TextSection(Text(TextType.MRKDWN, SOLUTION2)),
-        ])
+        Attachment(Color.WARNING, FALLBACK, blocks=blocks)
     ])

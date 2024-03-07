@@ -9,6 +9,8 @@ from k8s.models.common import ObjectMeta
 from k8s.models.namespace import Namespace
 from prometheus_client import Summary
 
+from aiven_poke.settings import Settings
+
 SLACK_CHANNEL_KEY = "replicator.nais.io/slackAlertsChannel"
 
 LOG = logging.getLogger(__name__)
@@ -42,13 +44,15 @@ def init_k8s_client(api_server):
 
 
 class Cluster:
-    def __init__(self, settings):
+    def __init__(self, settings: Settings):
         init_k8s_client(settings.api_server)
         self._settings = settings
         self._latency = Summary("k8s_latency_seconds", "Kubernetes latency", ["action", "resource"])
 
     @functools.lru_cache
     def get_slack_channel(self, team):
+        if self._settings.override_slack_channel is not None:
+            return self._settings.override_slack_channel
         try:
             with self._latency.labels("get", "namespace").time():
                 namespace = Namespace.get(team)
