@@ -3,6 +3,7 @@ import logging
 from collections import defaultdict
 
 from k8s.base import Model
+from k8s.client import NotFound
 from k8s.fields import Field
 from k8s.models.common import ObjectMeta
 from k8s.models.namespace import Namespace
@@ -42,7 +43,13 @@ def init_k8s_client(api_server):
 
 @functools.lru_cache
 def get_slack_channel(team):
-    namespace = Namespace.get(team)
+    try:
+        namespace = Namespace.get(team)
+    except NotFound:
+        if not team.startswith("team"):
+            return get_slack_channel("team"+team)
+        if not team.startswith("team-"):
+            return get_slack_channel("team-"+team[4:])
     annotations = namespace.metadata.annotations
     slack_channel = annotations.get(SLACK_CHANNEL_KEY)
     if not slack_channel:
