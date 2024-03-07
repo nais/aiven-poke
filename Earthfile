@@ -1,7 +1,7 @@
-VERSION 0.6
+VERSION 0.8
 
-ARG PY_VERSION=3.11
-ARG BASEIMAGE=europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
+ARG --global PY_VERSION=3.12
+ARG --global BASEIMAGE=europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
 
 FROM busybox
 

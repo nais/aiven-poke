@@ -90,7 +90,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: packetcoders/action-setup-cache-python-poetry@main
         with:
-          python-version: 3.11
+          python-version: 3.12
           poetry-version: 1.5.1
           install-args: --only=sbom-tools
       - name: Create SBOM
