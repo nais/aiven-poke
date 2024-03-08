@@ -40,3 +40,15 @@ values:
     config:
       type: string
       secret: true
+  extraEnv.HTTPS_PROXY:
+    displayName: HTTPS proxy
+    config:
+      type: string
+    ignoreKind:
+      - tenant
+  extraEnv.NO_PROXY:
+    displayName: NO_PROXY
+    config:
+      type: string
+    ignoreKind:
+      - tenant

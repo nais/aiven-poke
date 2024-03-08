@@ -8,6 +8,8 @@ push_gateway_address: ""
 enable_expiring_users: "true"
 enable_topics: "true"
 
+extraEnv: {}
+
 image:
   repository: europe-north1-docker.pkg.dev/nais-io/nais/images/aiven-poke
   pullPolicy: IfNotPresent
