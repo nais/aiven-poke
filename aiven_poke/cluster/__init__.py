@@ -24,7 +24,7 @@ def _create_k8s_client() -> Client:
         client.get(Service, "kubernetes", namespace="default")
         create_namespaced_resource("kafka.nais.io", "v1", "Topic", "topics")
     except Exception as e:
-        raise KubernetesError(f"Unable to connect to kubernetes cluster") from e
+        raise KubernetesError("Unable to connect to kubernetes cluster") from e
     return client
 
 

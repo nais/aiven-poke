@@ -12,7 +12,7 @@ class TopicSpec(DataclassDictMixIn):
 
 @dataclass
 class Topic(DataclassDictMixIn):
-    apiVersion: 'str' = None
+    apiVersion: 'str' = None  # NOQA
     kind: 'str' = None
     metadata: meta_v1.ObjectMeta = None
     spec: TopicSpec = None
