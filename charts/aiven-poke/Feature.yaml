@@ -13,7 +13,7 @@ values:
     computed:
       template: '"{{ .Env.aiven_project }}"'
   enableTopics:
-    description: Should we poke teams about expiring users
+    description: Should we poke teams about topics without cluster config
     computed:
       template: |
         {{ ne .Env.kind "onprem" }}

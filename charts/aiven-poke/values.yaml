@@ -5,8 +5,8 @@
 slackWebhookURL: ""
 aivenToken: ""
 push_gateway_address: ""
-enable_expiring_users: "true"
-enable_topics: "true"
+enableExpiringUsers: "true"
+enableTopics: "true"
 
 extraEnv: {}
 
