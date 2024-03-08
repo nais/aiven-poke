@@ -88,6 +88,12 @@ def _is_secret_protected(secret):
     return secret.metadata.annotations.get("aivenator.aiven.nais.io/protected") == "true"
 
 
+def _parse_application(user):
+    parts = user.username.split("_")
+    assert parts[0] == user.team
+    return parts[1]
+
+
 def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
     users = aiven.get_users()
     expiring_users_per_team = defaultdict(list)
@@ -99,7 +105,8 @@ def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
         secret = aiven_secrets.get(user.username)
         if not secret:
             continue
-        expiring_user = ExpiringUser(user.team, user.username, _is_secret_protected(secret),
+        expiring_user = ExpiringUser(user.team, user.username, _parse_application(user),
+                                     _is_secret_protected(secret),
                                      user.expiring_cert_not_valid_after_time)
         expiring_users_per_team[user.team].append(expiring_user)
         count += 1

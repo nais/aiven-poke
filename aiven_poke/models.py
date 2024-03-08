@@ -16,5 +16,6 @@ class TeamTopic:
 class ExpiringUser:
     team: str
     username: str
+    application: str
     is_protected: bool
     expiring_cert_not_valid_after_time: datetime

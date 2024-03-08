@@ -30,7 +30,7 @@ SOLUTION_NAIS_APP = " ".join(textwrap.dedent("""\
 NEEDS_HELP = " ".join(textwrap.dedent("""\
     If you need help, reach out in <#C5KUST8N6|nais>
 """).splitlines())
-USER_ROW = "`{username}`{protected}: Expires after {expires}"
+USER_ROW = "`{username}` used by {application}{protected}: Expires after {expires}"
 
 
 def create_user_payload(team, channel, users: list[ExpiringUser], main_project, cluster_name):
@@ -48,6 +48,7 @@ def create_user_payload(team, channel, users: list[ExpiringUser], main_project, 
     for user in users:
         params = {
             "username": user.username,
+            "application": user.application,
             "protected": " (non-nais)" if user.is_protected else "",
             "expires": user.expiring_cert_not_valid_after_time,
         }
