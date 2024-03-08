@@ -49,14 +49,14 @@ def _init_logging():
 def main():
     _init_logging()
     settings = Settings()
-    cluster = Cluster(settings)
-    cluster_name = os.getenv("NAIS_CLUSTER_NAME", "unknown")
     server = start_server()
     exit_code = 0
     try:
         for sig in (signal.SIGTERM, signal.SIGINT):
             signal.signal(sig, signal_handler)
         try:
+            cluster = Cluster(settings)
+            cluster_name = os.getenv("NAIS_CLUSTER_NAME", "unknown")
             LOG.info("Starting job with config %s", settings)
             topic_gauge = Gauge("number_of_topics", "Number of topics found", ["source"])
             team_gauge = Gauge("number_of_teams", "Number of teams with topics", ["source"])

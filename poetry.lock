@@ -12,6 +12,26 @@ files = [
 ]
 
 [[package]]
+name = "anyio"
+version = "4.3.0"
+description = "High level compatibility layer for multiple asynchronous event loop implementations"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "anyio-4.3.0-py3-none-any.whl", hash = "sha256:048e05d0f6caeed70d731f3db756d35dcc1f35747c8c403364a8332c630441b8"},
+    {file = "anyio-4.3.0.tar.gz", hash = "sha256:f75253795a87df48568485fd18cdd2a3fa5c4f7c5be8e5e36637733fce06fed6"},
+]
+
+[package.dependencies]
+idna = ">=2.8"
+sniffio = ">=1.1"
+
+[package.extras]
+doc = ["Sphinx (>=7)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypothesis (>=4.0)", "psutil (>=5.9)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "uvloop (>=0.17)"]
+trio = ["trio (>=0.23)"]
+
+[[package]]
 name = "arrow"
 version = "1.3.0"
 description = "Better dates & times for Python"
@@ -84,17 +104,6 @@ python-versions = "*"
 files = [
     {file = "boolean.py-4.0-py3-none-any.whl", hash = "sha256:2876f2051d7d6394a531d82dc6eb407faa0b01a0a0b3083817ccd7323b8d96bd"},
     {file = "boolean.py-4.0.tar.gz", hash = "sha256:17b9a181630e43dde1851d42bef546d616d5d9b4480357514597e78b203d06e4"},
-]
-
-[[package]]
-name = "cachetools"
-version = "3.1.1"
-description = "Extensible memoizing collections and decorators"
-optional = false
-python-versions = "*"
-files = [
-    {file = "cachetools-3.1.1-py2.py3-none-any.whl", hash = "sha256:428266a1c0d36dc5aca63a2d7c5942e88c2c898d72139fca0e97fdd2380517ae"},
-    {file = "cachetools-3.1.1.tar.gz", hash = "sha256:8ea2d3ce97850f31e4a08b0e2b5e6c34997d7216a9d2c98e0f3978630d4da69a"},
 ]
 
 [[package]]
@@ -496,6 +505,62 @@ gitdb = ">=4.0.1,<5"
 test = ["black", "coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mock", "mypy", "pre-commit", "pytest (>=7.3.1)", "pytest-cov", "pytest-instafail", "pytest-mock", "pytest-sugar"]
 
 [[package]]
+name = "h11"
+version = "0.14.0"
+description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
+    {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
+]
+
+[[package]]
+name = "httpcore"
+version = "1.0.4"
+description = "A minimal low-level HTTP client."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "httpcore-1.0.4-py3-none-any.whl", hash = "sha256:ac418c1db41bade2ad53ae2f3834a3a0f5ae76b56cf5aa497d2d033384fc7d73"},
+    {file = "httpcore-1.0.4.tar.gz", hash = "sha256:cb2839ccfcba0d2d3c1131d3c3e26dfc327326fbe7a5dc0dbfe9f6c9151bb022"},
+]
+
+[package.dependencies]
+certifi = "*"
+h11 = ">=0.13,<0.15"
+
+[package.extras]
+asyncio = ["anyio (>=4.0,<5.0)"]
+http2 = ["h2 (>=3,<5)"]
+socks = ["socksio (==1.*)"]
+trio = ["trio (>=0.22.0,<0.25.0)"]
+
+[[package]]
+name = "httpx"
+version = "0.27.0"
+description = "The next generation HTTP client."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "httpx-0.27.0-py3-none-any.whl", hash = "sha256:71d5465162c13681bff01ad59b2cc68dd838ea1f10e51574bac27103f00c91a5"},
+    {file = "httpx-0.27.0.tar.gz", hash = "sha256:a0cb88a46f32dc874e04ee956e4c2764aba2aa228f650b06788ba6bda2962ab5"},
+]
+
+[package.dependencies]
+anyio = "*"
+certifi = "*"
+httpcore = "==1.*"
+idna = "*"
+sniffio = "*"
+
+[package.extras]
+brotli = ["brotli", "brotlicffi"]
+cli = ["click (==8.*)", "pygments (==2.*)", "rich (>=10,<14)"]
+http2 = ["h2 (>=3,<5)"]
+socks = ["socksio (==1.*)"]
+
+[[package]]
 name = "idna"
 version = "3.6"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -628,27 +693,6 @@ files = [
 referencing = ">=0.31.0"
 
 [[package]]
-name = "k8s"
-version = "0.24.2"
-description = "Python client library for the Kubernetes API"
-optional = false
-python-versions = "*"
-files = [
-    {file = "k8s-0.24.2-py2.py3-none-any.whl", hash = "sha256:bfca9927c81bf74fad48c62640178359ad3127aed4a2858323eb5b4f090e3312"},
-    {file = "k8s-0.24.2.tar.gz", hash = "sha256:fa8c6cc6efc415e1801bf87956499bce984a4250be623c72b58173ba31b2059d"},
-]
-
-[package.dependencies]
-cachetools = "3.1.1"
-pyrfc3339 = "1.1"
-requests = "2.31.0"
-
-[package.extras]
-codacy = ["codacy-coverage"]
-dev = ["mock (==3.0.5)", "prospector (==1.2.0)", "pytest (==4.6.11)", "pytest-cov (==2.7.1)", "pytest-helpers-namespace (==2019.1.8)", "pytest-html (==1.22.0)", "pytest-sugar (==0.9.4)", "tox (==3.24.5)"]
-docs = ["Sphinx (>=1.6.3)"]
-
-[[package]]
 name = "lazy-object-proxy"
 version = "1.10.0"
 description = "A fast and thorough lazy object proxy."
@@ -711,6 +755,33 @@ files = [
 [package.extras]
 docs = ["Sphinx (>=5.0.2)", "doc8 (>=0.11.2)", "sphinx-autobuild", "sphinx-copybutton", "sphinx-reredirects (>=0.1.2)", "sphinx-rtd-dark-mode (>=1.3.0)", "sphinx-rtd-theme (>=1.0.0)", "sphinxcontrib-apidoc (>=0.4.0)"]
 testing = ["black", "isort", "pytest (>=6,!=7.0.0)", "pytest-xdist (>=2)", "twine"]
+
+[[package]]
+name = "lightkube"
+version = "0.15.2"
+description = "Lightweight kubernetes client library"
+optional = false
+python-versions = "*"
+files = [
+    {file = "lightkube-0.15.2-py3-none-any.whl", hash = "sha256:54c509f71d56f4977f70c2bc1fdf0c79e9898b55cec4f3cbc6051f8d9961a75b"},
+    {file = "lightkube-0.15.2.tar.gz", hash = "sha256:1297a3c6ebe873debf73cd584e288534a1f2fd643bbf8285dfbd76550c5076b0"},
+]
+
+[package.dependencies]
+httpx = ">=0.24.0"
+lightkube-models = ">=1.15.12.0"
+PyYAML = "*"
+
+[[package]]
+name = "lightkube-models"
+version = "1.29.0.7"
+description = "Models and Resources for lightkube module"
+optional = false
+python-versions = "*"
+files = [
+    {file = "lightkube-models-1.29.0.7.tar.gz", hash = "sha256:36ab61e1baccb0d7d2306e909b4f6b4c3cd49c26d74e1a3f61f3b67ceac93d63"},
+    {file = "lightkube_models-1.29.0.7-py3-none-any.whl", hash = "sha256:b86ea48a9a1f36abe038e1d69ad7a7bab3a875102d3e8771431899a1bbda8ba5"},
+]
 
 [[package]]
 name = "lxml"
@@ -1322,20 +1393,6 @@ files = [
 diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
-name = "pyrfc3339"
-version = "1.1"
-description = "Generate and parse RFC 3339 timestamps"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pyRFC3339-1.1-py2.py3-none-any.whl", hash = "sha256:67196cb83b470709c580bb4738b83165e67c6cc60e1f2e4f286cfcb402a926f4"},
-    {file = "pyRFC3339-1.1.tar.gz", hash = "sha256:81b8cbe1519cdb79bed04910dd6fa4e181faf8c88dff1e1b987b5f7ab23a5b1a"},
-]
-
-[package.dependencies]
-pytz = "*"
-
-[[package]]
 name = "pytest"
 version = "8.0.2"
 description = "pytest: simple powerful testing with Python"
@@ -1419,17 +1476,6 @@ files = [
 
 [package.extras]
 cli = ["click (>=5.0)"]
-
-[[package]]
-name = "pytz"
-version = "2024.1"
-description = "World timezone definitions, modern and historical"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytz-2024.1-py2.py3-none-any.whl", hash = "sha256:328171f4e3623139da4983451950b28e95ac706e13f3f2630a879749e7a8b319"},
-    {file = "pytz-2024.1.tar.gz", hash = "sha256:2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812"},
-]
 
 [[package]]
 name = "pyyaml"
@@ -1744,6 +1790,17 @@ files = [
 ]
 
 [[package]]
+name = "sniffio"
+version = "1.3.1"
+description = "Sniff out which async library your code is running under"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
+    {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
+]
+
+[[package]]
 name = "snowballstemmer"
 version = "2.2.0"
 description = "This package provides 29 stemmers for 28 languages generated from Snowball algorithms."
@@ -1968,4 +2025,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "f66ccb57f9a5e8bc48a8c7cd69f8afc0da422c224da3af536535796901887a32"
+content-hash = "07fe39c0013901f167040a3b1fea498f759ac239157c8d55e43e5ef2e9d9a000"
