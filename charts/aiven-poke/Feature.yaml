@@ -40,6 +40,11 @@ values:
     config:
       type: string
       secret: true
+  slackWebhookEnabled:
+    displayName: Slack enabled
+    description: Should pokes be sent to Slack or just logged
+    config:
+      type: bool
   extraEnv.HTTPS_PROXY:
     displayName: HTTPS proxy
     config:

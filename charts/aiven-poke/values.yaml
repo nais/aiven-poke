@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 slackWebhookURL: ""
+slackWebhookEnabled: "true"
 aivenToken: ""
 push_gateway_address: ""
 enableExpiringUsers: "true"
