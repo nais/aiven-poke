@@ -16,6 +16,7 @@ rules:
       - ""
     resources:
       - namespaces
+      - services
     verbs:
       - get
   - apiGroups:
