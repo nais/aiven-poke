@@ -23,7 +23,7 @@ cyclonedx-bom = "^4.1.4"
 setuptools = "^69.2.0"
 pytest = "^8"
 prospector = "^1"
-pytest-cov = "^4"
+pytest-cov = "^5"
 pytest-sugar = "^1.0"
 
 [build-system]
