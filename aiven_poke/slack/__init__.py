@@ -41,10 +41,10 @@ class Poke:
             LOG.info("Notified %s about expiring users: %s", channel, usernames)
 
     def post_payload(self, payload):
-        if self._settings.webhook_enabled and self._settings.webhook_url is not None:
+        if self._settings.webhook_enabled and self._settings.webhook_url.get_secret_value() is not None:
             data = dataclasses.asdict(payload)
             with self._latency.time():
-                resp = SESSION.post(self._settings.webhook_url, json=data)
+                resp = SESSION.post(self._settings.webhook_url.get_secret_value(), json=data)
             if LOG.isEnabledFor(logging.DEBUG):
                 dumped = dump.dump_all(resp).decode('utf-8')
                 LOG.debug(dumped)
