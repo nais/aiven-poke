@@ -14,7 +14,7 @@ requests = "^2"
 requests-toolbelt = "^1.0.0"
 prometheus-client = "^0.20.0"
 pydantic-settings = "^2.3.3"
-lightkube = "^0.15.2"
+lightkube = "^0.15.3"
 
 [tool.poetry.group.sbom-tools.dependencies]
 cyclonedx-bom = "^4.5.0"
