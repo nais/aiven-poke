@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
 
     aiven_token: SecretStr
-    main_project: str = "nav-integration-test"
+    main_project: str
     webhook_url: Optional[SecretUrlPath] = None
     webhook_enabled: bool = True
     push_gateway_address: Optional[str] = None
