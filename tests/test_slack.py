@@ -21,7 +21,12 @@ class TestSlack:
 
     def test_post_payload(self, payload):
         with mock.patch("aiven_poke.slack.SESSION") as m:
-            settings = Settings(aiven_token="fake_token", webhook_url=WEBHOOK_URL, webhook_enabled=True)
+            settings = Settings(
+                aiven_token="fake_token",
+                main_project="fake_project",
+                webhook_url=WEBHOOK_URL,
+                webhook_enabled=True
+            )
             poke = Poke(settings, "test")
             poke.post_payload(payload)
             m.post.assert_called()
