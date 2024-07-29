@@ -8,8 +8,8 @@ environmentKinds:
   - onprem
 values:
   aivenProject:
-    description: Which aiven project to look for topics and users in
-    displayName: aiven project
+    description: Which Aiven project to look for topics and users in
+    displayName: Aiven project
     computed:
       template: '"{{ .Env.aiven_project }}"'
   enableTopics:
@@ -18,6 +18,8 @@ values:
       template: |
         {{ ne .Env.kind "onprem" }}
   aivenToken:
+    computed:
+      template: '"{{ .Env.aiven_application_token_aiven_poke }}"'
     config:
       type: string
       secret: true
