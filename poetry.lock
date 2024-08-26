@@ -758,19 +758,22 @@ testing = ["black", "isort", "pytest (>=6,!=7.0.0)", "pytest-xdist (>=2)", "twin
 
 [[package]]
 name = "lightkube"
-version = "0.15.3"
+version = "0.15.4"
 description = "Lightweight kubernetes client library"
 optional = false
 python-versions = "*"
 files = [
-    {file = "lightkube-0.15.3-py3-none-any.whl", hash = "sha256:0f1c5e3b80f727df161965eff9cd6bc029c47e5a8569ab3e1acc429fd8c73db1"},
-    {file = "lightkube-0.15.3.tar.gz", hash = "sha256:235b66409b67e06ce26bd5c7ae27e105bb6016ce0962d144e272a31155545e27"},
+    {file = "lightkube-0.15.4-py3-none-any.whl", hash = "sha256:7dde49694f2933b757ee6dfee0e028a56d7a13f47476bf54a21ec7cee343b09b"},
+    {file = "lightkube-0.15.4.tar.gz", hash = "sha256:fe7939f8da5b68d80809243c9abf601fca2e5425228bb02c2ad23ed3e56401a8"},
 ]
 
 [package.dependencies]
 httpx = ">=0.24.0"
 lightkube-models = ">=1.15.12.0"
 PyYAML = "*"
+
+[package.extras]
+dev = ["pytest", "pytest-asyncio (<0.17.0)", "respx"]
 
 [[package]]
 name = "lightkube-models"
@@ -2050,4 +2053,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "b3c55bff2ca8b57d1878cd1ab1dda23404d5bb9bdf068e1ff949c76d922b48bc"
+content-hash = "ca5a5d2c8a07fbbedd146136a336ca772c1370aa3725490c0fa7e51cae0c3c4d"
