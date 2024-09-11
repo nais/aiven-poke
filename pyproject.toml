@@ -13,7 +13,7 @@ pydantic = "^2.9.1"
 requests = "^2"
 requests-toolbelt = "^1.0.0"
 prometheus-client = "^0.20.0"
-pydantic-settings = "^2.4.0"
+pydantic-settings = "^2.5.2"
 lightkube = "^0.15.4"
 
 [tool.poetry.group.sbom-tools.dependencies]
