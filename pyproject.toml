@@ -17,7 +17,7 @@ pydantic-settings = "^2.6.0"
 lightkube = "^0.15.4"
 
 [tool.poetry.group.sbom-tools.dependencies]
-cyclonedx-bom = "^5.0.0"
+cyclonedx-bom = "^5.1.0"
 
 [tool.poetry.group.dev.dependencies]
 setuptools = "^75.2.0"

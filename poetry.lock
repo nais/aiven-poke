@@ -314,13 +314,13 @@ toml = ["tomli"]
 
 [[package]]
 name = "cyclonedx-bom"
-version = "5.0.0"
+version = "5.1.0"
 description = "CycloneDX Software Bill of Materials (SBOM) generator for Python projects and environments"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "cyclonedx_bom-5.0.0-py3-none-any.whl", hash = "sha256:75c3db3b4cf7feb558892700a3ad449822a92ea1a39273a35c7f4b134c92514f"},
-    {file = "cyclonedx_bom-5.0.0.tar.gz", hash = "sha256:d902404601e06be052fd7e85d914645da3d7e2122bfcff853cdc1d470603a601"},
+    {file = "cyclonedx_bom-5.1.0-py3-none-any.whl", hash = "sha256:dc9ee999a63f4e47772f64c2afaf2c9f3fd4e5df1ab1693111b77859b6dd1f17"},
+    {file = "cyclonedx_bom-5.1.0.tar.gz", hash = "sha256:8ae325b9b3099c65cc3df1e5a6614274f21c8d1510ef83ebe66b98653a6328c8"},
 ]
 
 [package.dependencies]
@@ -1927,4 +1927,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "e6e759a5195588ac104124ea5bfe050416664e339e730ec429418cfe144781a3"
+content-hash = "f150f333a4eb6d83a4f85454b3bd3740696cd955fecc451304e1d83f5f90502f"
