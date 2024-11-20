@@ -3,8 +3,8 @@ import textwrap
 
 from .payload import Text, TextType, Payload, Attachment, Color, Header, TextSection, FieldsSection
 
-CREATE_DOC = "https://doc.nais.io/persistence/kafka/manage_topics/#creating-topics-and-defining-access"
-PERMA_DELETE_DOC = "https://doc.nais.io/persistence/kafka/manage_topics/#permanently-deleting-topic-and-data"
+CREATE_DOC = "https://doc.nais.io/persistence/kafka/how-to/create/"
+PERMA_DELETE_DOC = "https://doc.nais.io/persistence/kafka/how-to/delete/"
 MAIN_HEADER = "Your team has topics on Aiven which are not found in a nais cluster"
 WHAT_IS_THIS = " ".join(textwrap.dedent("""
     Topics on Aiven should be defined by a Topic resource in a nais cluster.

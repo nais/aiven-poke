@@ -3,7 +3,7 @@ import textwrap
 from .payload import Payload, Attachment, Color, Header, Text, TextType, TextSection
 from ..models import ExpiringUser
 
-RENEW_DOC = "https://doc.nais.io/how-to-guides/persistence/kafka/renew-credentials-for-non-nais/"
+RENEW_DOC = "https://doc.nais.io/persistence/kafka/how-to/renew-credentials-for-non-nais/"
 
 FALLBACK = " ".join(textwrap.dedent("""\
     Your team has users with expiring credentials in the {main_project} pool, defined in {cluster_name}.
