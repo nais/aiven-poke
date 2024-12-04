@@ -12,7 +12,7 @@ fiaas-logging = "^0.1.1"
 pydantic = "^2.10.3"
 requests = "^2"
 requests-toolbelt = "^1.0.0"
-prometheus-client = "^0.21.0"
+prometheus-client = "^0.21.1"
 pydantic-settings = "^2.6.1"
 lightkube = "^0.15.5"
 
