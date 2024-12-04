@@ -11,6 +11,7 @@ from prometheus_client import push_to_gateway, REGISTRY, generate_latest, Gauge
 from aiven_poke.aiven import AivenKafka
 from aiven_poke.cluster import Cluster
 from aiven_poke.endpoints import start_server
+from aiven_poke.errors import NoTopicsFoundError
 from aiven_poke.models import TeamTopic, ExpiringUser
 from aiven_poke.settings import Settings
 from aiven_poke.slack import Poke
@@ -76,6 +77,9 @@ def main():
                 LOG.info(generate_latest().decode("utf-8"))
         except ExitOnSignal:
             pass
+        except NoTopicsFoundError:
+            LOG.error("No topics found in cluster! This is typically a sign of misconfiguration, exiting")
+            exit_code = 112
         except Exception as e:
             logging.exception("unwanted exception: %s", e)
             exit_code = 113
@@ -122,6 +126,8 @@ def handle_topics(aiven, poke, cluster, team_gauge, topic_gauge):
     aiven_topics = aiven.get_team_topics(topic_gauge.labels("aiven"))
     team_gauge.labels("aiven").set(len(aiven_topics))
     cluster_topics = cluster.get_cluster_topics(topic_gauge.labels("cluster"))
+    if len(cluster_topics) == 0:
+        raise NoTopicsFoundError("No topics found in cluster")
     team_gauge.labels("cluster").set(len(cluster_topics))
     missing_in_cluster = compare(cluster, aiven_topics, cluster_topics)
     team_gauge.labels("missing").set(len(missing_in_cluster))
