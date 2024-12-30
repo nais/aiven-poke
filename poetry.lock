@@ -718,13 +718,13 @@ testing = ["black", "isort", "pytest (>=6,!=7.0.0)", "pytest-xdist (>=2)", "twin
 
 [[package]]
 name = "lightkube"
-version = "0.16.1"
+version = "0.16.2"
 description = "Lightweight kubernetes client library"
 optional = false
 python-versions = "*"
 files = [
-    {file = "lightkube-0.16.1-py3-none-any.whl", hash = "sha256:5201d09cd854a4102491387235c0754a7ea47a007e15d95dee9294a7d4e88eb7"},
-    {file = "lightkube-0.16.1.tar.gz", hash = "sha256:d71e5a83521e10d32e959255bb4d968610772f695d1beb37e972824f7272baf7"},
+    {file = "lightkube-0.16.2-py3-none-any.whl", hash = "sha256:61a1477eba728207f511febc27165d22e5cae34ff8cb342ae35360c969d02a59"},
+    {file = "lightkube-0.16.2.tar.gz", hash = "sha256:f6807fe72cee1a82788f0e066b5b2ef28be32756eded68421a785401c39236f1"},
 ]
 
 [package.dependencies]
@@ -1944,4 +1944,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "0631ac2f8701990ac97757da206595d69e3a4b32b93b6f78664875f5e692e807"
+content-hash = "e1028ddfeb8b6a0762bbe8021d671b3e3c2d6b542d15f57fa509b55e13370b2c"
