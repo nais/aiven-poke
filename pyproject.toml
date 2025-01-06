@@ -20,7 +20,7 @@ lightkube = "^0.16.2"
 cyclonedx-bom = "^5.1.1"
 
 [tool.poetry.group.dev.dependencies]
-setuptools = "^75.6.0"
+setuptools = "^75.7.0"
 pytest = "^8"
 prospector = "^1"
 pytest-cov = "^6"
