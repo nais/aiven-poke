@@ -43,7 +43,7 @@ jobs:
         with:
           version: "latest" # or pin to an specific version, e.g. "v0.6.10"
       - name: Install cosign
-        uses: sigstore/cosign-installer@c56c2d3e59e4281cc41dea2217323ba5694b171e # ratchet:sigstore/cosign-installer@main
+        uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # ratchet:sigstore/cosign-installer@main
         with:
           cosign-release: 'v2.2.1'
       - name: Checkout
