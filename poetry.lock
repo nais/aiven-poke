@@ -338,21 +338,21 @@ toml = ["tomli ; python_full_version <= \"3.11.0a6\""]
 
 [[package]]
 name = "cyclonedx-bom"
-version = "5.3.0"
+version = "5.5.0"
 description = "CycloneDX Software Bill of Materials (SBOM) generator for Python projects and environments"
 optional = false
 python-versions = "<4.0,>=3.8"
 groups = ["sbom-tools"]
 files = [
-    {file = "cyclonedx_bom-5.3.0-py3-none-any.whl", hash = "sha256:31328db8adbb580538df996df61615c614711c75a5c81b0f9665270194a308c1"},
-    {file = "cyclonedx_bom-5.3.0.tar.gz", hash = "sha256:1468aaf8dc4c8f178fc8403141281bdd9ba609053aaddea68348b2dfb5da6bc7"},
+    {file = "cyclonedx_bom-5.5.0-py3-none-any.whl", hash = "sha256:9198daac6fa1a49549c4d4e227d4c4ccfc791e5d00c1adf11e0302ca39ee7af1"},
+    {file = "cyclonedx_bom-5.5.0.tar.gz", hash = "sha256:fcfb57b340ac5a6e4190133cf57b50f04c021cb0bf99a4351b4b55f666df686d"},
 ]
 
 [package.dependencies]
 chardet = ">=5.1,<6.0"
-cyclonedx-python-lib = {version = ">=8.0,<10.0", extras = ["validation"]}
+cyclonedx-python-lib = {version = ">=8.0,<11", extras = ["validation"]}
 packageurl-python = ">=0.11,<2"
-packaging = ">=22,<25"
+packaging = ">=22,<26"
 pip-requirements-parser = ">=32.0,<33.0"
 
 [[package]]
@@ -2043,4 +2043,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "6daeb1ba4959ae16ae1e8cde204f26743f479ecf380c08148149e84811f8de82"
+content-hash = "f0a59601d326afcd6c0f6b0c801e3f9c11e3a2fb3addcce5ae2553c9c2e0ffbe"
