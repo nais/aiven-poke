@@ -1,0 +1,24 @@
+[tools]
+poetry = "latest"
+
+[tasks.docker]
+description = "Build Docker image"
+run = "docker build -t aiven-poke ."
+
+[tasks.install]
+description = "Install dependencies"
+run = "poetry install --no-interaction --all-groups"
+
+[tasks.test]
+description = "Run tests"
+run = "poetry run pytest"
+depends = ["install"]
+
+[tasks.lint]
+description = "Run linters"
+run = "poetry run prospector"
+depends = ["install"]
+
+[tasks.check]
+description = "Run tests and linters"
+depends = ["test", "lint"]
