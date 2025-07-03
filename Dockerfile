@@ -25,12 +25,13 @@ FROM python:${PY_VERSION}-slim AS docker
 
 WORKDIR /app
 
-COPY --from=deps /app/.venv ./
-COPY --from=build /app/aiven_poke ./
+COPY --from=deps /app/.venv ./.venv/
+COPY --from=build /app/aiven_poke ./aiven_poke/
 
 ENV PATH="/bin:/usr/bin:/usr/local/bin:/app/.venv/bin"
 
 ARG PY_VERSION
 ENV PYTHONPATH=/app/.venv/lib/python${PY_VERSION}/site-packages
 
+RUN python3 -c "import aiven_poke" ## Minimal testing that imports actually work
 ENTRYPOINT ["python", "-m", "aiven_poke"]
