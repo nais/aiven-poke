@@ -20,7 +20,7 @@ lightkube = "^0.17.2"
 setuptools = "^80.9.0"
 pytest = "^8"
 prospector = "^1"
-pytest-cov = "^6"
+pytest-cov = "^7"
 pytest-sugar = "^1.1"
 
 [build-system]
