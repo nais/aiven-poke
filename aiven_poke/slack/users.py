@@ -28,7 +28,7 @@ SOLUTION_NAIS_APP = " ".join(textwrap.dedent("""\
     For users used by applications running in the nais platform, a simple redeploy of your application should be enough.
 """).splitlines())
 NEEDS_HELP = " ".join(textwrap.dedent("""\
-    If you need help, reach out in <#C5KUST8N6|nais>
+    If you need help, reach out in <#C09CHA215S5|nais>
 """).splitlines())
 USER_ROW = "`{username}` used by {application}{protected}: Expires after {expires}"
 

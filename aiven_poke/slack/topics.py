@@ -18,7 +18,7 @@ SOLUTION1 = " ".join(textwrap.dedent(f"""\
     If the intention was to delete the topic, follow the procedure for <{PERMA_DELETE_DOC}|permanently deleting data>.
 """).splitlines())
 SOLUTION2 = " ".join(textwrap.dedent("""\
-    If you need help, reach out in <#C73B9LC86|kafka> or <#C5KUST8N6|nais>
+    If you need help, reach out in <#C73B9LC86|kafka> or <#C09CHA215S5|nais>
 """).splitlines())
 FALLBACK = "Your team has topics on Aiven which are not found in a nais cluster. " \
            "If this is not intentional, please rectify the situation."
