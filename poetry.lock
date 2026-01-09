@@ -543,14 +543,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "lightkube"
-version = "0.19.0"
+version = "0.19.1"
 description = "Lightweight kubernetes client library"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "lightkube-0.19.0-py3-none-any.whl", hash = "sha256:f0ec92ce11ec07e98619e65de3381180a676fe7a62342e0996e19d3928d21650"},
-    {file = "lightkube-0.19.0.tar.gz", hash = "sha256:0d1e6c004b4a0ebc6a15d9c4db9663261fb84f3ad2ee00aa8cb520af11639069"},
+    {file = "lightkube-0.19.1-py3-none-any.whl", hash = "sha256:49fef08a1c7aa42082820111ffd5dbbaf78f54c99385810690fc9d94eef5c80d"},
+    {file = "lightkube-0.19.1.tar.gz", hash = "sha256:4c8526068024c194c02fbc0ca6021922feb4b1b9d741d330129f873b27e0fe97"},
 ]
 
 [package.dependencies]
@@ -1458,4 +1458,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "075148e32b0a6f08210be65359117d405a239e291e0080dccd67050c604bc7f1"
+content-hash = "94a1b392f14f8d2d8c1936a071dd638d281fe32c3d83e7d088e26421622ca263"
