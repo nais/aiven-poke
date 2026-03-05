@@ -105,7 +105,10 @@ def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
     for user in users:
         if user.expiring_cert_not_valid_after_time is None:
             continue
-        aiven_secrets = cluster.get_aiven_secrets_by_name(user.team)
+        try:
+            aiven_secrets = cluster.get_aiven_secrets_by_name(user.team)
+        except cluster.NamespaceNotFound:
+            continue
         secret = aiven_secrets.get(user.username)
         if not secret:
             continue

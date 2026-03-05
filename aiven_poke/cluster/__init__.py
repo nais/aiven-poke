@@ -17,6 +17,10 @@ SLACK_CHANNEL_KEY = "replicator.nais.io/slackAlertsChannel"
 LOG = logging.getLogger(__name__)
 
 
+class NamespaceNotFound(Exception):
+    pass
+
+
 def _create_k8s_client() -> Client:
     try:
         config = KubeConfig.from_env()
@@ -45,6 +49,7 @@ class Cluster:
                     return self.get_namespace("team" + team)
                 if not team.startswith("team-"):
                     return self.get_namespace("team-" + team[4:])
+                raise NamespaceNotFound from e
             raise
 
     @functools.lru_cache
