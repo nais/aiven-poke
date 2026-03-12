@@ -21,16 +21,10 @@ class TestAiven:
                     "retention_hours": 168,
                     "state": "ACTIVE",
                     "tags": [
-                        {
-                            "key": "created-by",
-                            "value": "Kafkarator"
-                        },
-                        {
-                            "key": "touched-at",
-                            "value": "2022-10-20T08:10:15Z"
-                        }
+                        {"key": "created-by", "value": "Kafkarator"},
+                        {"key": "touched-at", "value": "2022-10-20T08:10:15Z"},
                     ],
-                    "topic_name": "team1.others.v1"
+                    "topic_name": "team1.others.v1",
                 },
                 {
                     "cleanup_policy": "compact",
@@ -41,7 +35,7 @@ class TestAiven:
                     "retention_hours": 168,
                     "state": "ACTIVE",
                     "tags": [],
-                    "topic_name": "team1.api_stream_-case.v1-state-store-changelog"
+                    "topic_name": "team1.api_stream_-case.v1-state-store-changelog",
                 },
                 {
                     "cleanup_policy": "delete",
@@ -52,17 +46,11 @@ class TestAiven:
                     "retention_hours": 336,
                     "state": "ACTIVE",
                     "tags": [
-                        {
-                            "key": "created-by",
-                            "value": "Kafkarator"
-                        },
-                        {
-                            "key": "touched-at",
-                            "value": "2022-10-20T07:50:00Z"
-                        }
+                        {"key": "created-by", "value": "Kafkarator"},
+                        {"key": "touched-at", "value": "2022-10-20T07:50:00Z"},
                     ],
-                    "topic_name": "team1.topic1"
-                }
+                    "topic_name": "team1.topic1",
+                },
             ]
         }
 
@@ -81,7 +69,7 @@ class TestAiven:
                     "access_key": "-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----\n",
                     "password": "not-a-password",
                     "type": "normal",
-                    "username": "team1_api_ef438220_MTP"
+                    "username": "team1_api_ef438220_MTP",
                 },
                 {
                     "access_cert": "-----BEGIN CERTIFICATE-----\n-----END CERTIFICATE-----\n",
@@ -89,7 +77,7 @@ class TestAiven:
                     "access_key": "-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----\n",
                     "password": "not-a-password",
                     "type": "normal",
-                    "username": "team1_filestore_778663d9_fAK"
+                    "username": "team1_filestore_778663d9_fAK",
                 },
                 {
                     "access_cert": "-----BEGIN CERTIFICATE-----\n-----END CERTIFICATE-----\n",
@@ -97,7 +85,7 @@ class TestAiven:
                     "access_key": "-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----\n",
                     "password": "not-a-password",
                     "type": "normal",
-                    "username": "team1_collection_95a74f92_FYa"
+                    "username": "team1_collection_95a74f92_FYa",
                 },
                 {
                     "access_cert": "-----BEGIN CERTIFICATE-----\n-----END CERTIFICATE-----\n",
@@ -106,7 +94,7 @@ class TestAiven:
                     "expiring_cert_not_valid_after_time": "2024-05-10T20:11:16Z",
                     "password": "not-a-password",
                     "type": "normal",
-                    "username": "team2_cucumber-feature_7c5d8385_rgu"
+                    "username": "team2_cucumber-feature_7c5d8385_rgu",
                 },
                 {
                     "access_cert": "-----BEGIN CERTIFICATE-----\n-----END CERTIFICATE-----\n",
@@ -115,7 +103,7 @@ class TestAiven:
                     "expiring_cert_not_valid_after_time": "2024-05-10T20:12:25Z",
                     "password": "not-a-password",
                     "type": "normal",
-                    "username": "team2_cucumber_9fc2370d_rgu"
+                    "username": "team2_cucumber_9fc2370d_rgu",
                 },
             ]
         }

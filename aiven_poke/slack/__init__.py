@@ -46,15 +46,16 @@ class Poke:
             with self._latency.time():
                 resp = SESSION.post(self._settings.webhook_url.get_secret_value(), json=data)
             if LOG.isEnabledFor(logging.DEBUG):
-                dumped = dump.dump_all(resp).decode('utf-8')
+                dumped = dump.dump_all(resp).decode("utf-8")
                 LOG.debug(dumped)
             if not resp.ok:
                 LOG.error("Failed sending data to webhook. The received message was:\n%s", resp.text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    tt = TeamTopic("nais", "#jk-tullekanal",
-                   frozenset(("nais.test-topic", "nais.topic-test", "nais.probably-a-test-too")))
+    tt = TeamTopic(
+        "nais", "#jk-tullekanal", frozenset(("nais.test-topic", "nais.topic-test", "nais.probably-a-test-too"))
+    )
     poke = Poke(Settings(), "test")
     poke.topics([tt])

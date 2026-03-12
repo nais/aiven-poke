@@ -14,11 +14,6 @@ description = "Run tests"
 run = "poetry run pytest"
 depends = ["install"]
 
-[tasks.lint]
-description = "Run linters"
-run = "poetry run prospector"
-depends = ["install"]
-
 [tasks.check]
 description = "Run tests and linters"
-depends = ["test", "lint"]
+depends = ["test", "lint", "fmt-check"]

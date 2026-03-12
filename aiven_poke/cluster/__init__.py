@@ -82,9 +82,9 @@ class Cluster:
         namespace = self.get_namespace(team)
         aiven_secrets_by_name = {}
         with self._latency.labels("list", "secret").time():
-            secrets = self._client.list(Secret, namespace=namespace.metadata.name, labels={
-                "type": "aivenator.aiven.nais.io"
-            })
+            secrets = self._client.list(
+                Secret, namespace=namespace.metadata.name, labels={"type": "aivenator.aiven.nais.io"}
+            )
             for secret in secrets:
                 service_user = secret.metadata.annotations.get("kafka.aiven.nais.io/serviceUser")
                 if service_user:

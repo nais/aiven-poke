@@ -24,7 +24,7 @@ class ServerThread(threading.Thread):
 
 
 def start_server():
-    app = flask.Flask('healthz')
+    app = flask.Flask("healthz")
 
     @app.route("/isHealthy")
     def healthy():

@@ -12,20 +12,25 @@ WEBHOOK_URL = "https://example.com"
 class TestSlack:
     @pytest.fixture
     def payload(self):
-        return Payload("#channel", "text", attachments=[
-            Attachment(Color.GOOD, "att_fallback", blocks=[
-                Header(Text(TextType.PLAIN, "header")),
-                Divider(),
-            ])
-        ])
+        return Payload(
+            "#channel",
+            "text",
+            attachments=[
+                Attachment(
+                    Color.GOOD,
+                    "att_fallback",
+                    blocks=[
+                        Header(Text(TextType.PLAIN, "header")),
+                        Divider(),
+                    ],
+                )
+            ],
+        )
 
     def test_post_payload(self, payload):
         with mock.patch("aiven_poke.slack.SESSION") as m:
             settings = Settings(
-                aiven_token="fake_token",
-                main_project="fake_project",
-                webhook_url=WEBHOOK_URL,
-                webhook_enabled=True
+                aiven_token="fake_token", main_project="fake_project", webhook_url=WEBHOOK_URL, webhook_enabled=True
             )
             poke = Poke(settings, "test")
             poke.post_payload(payload)

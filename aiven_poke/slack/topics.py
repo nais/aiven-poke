@@ -6,22 +6,30 @@ from .payload import Text, TextType, Payload, Attachment, Color, Header, TextSec
 CREATE_DOC = "https://doc.nais.io/persistence/kafka/how-to/create/"
 PERMA_DELETE_DOC = "https://doc.nais.io/persistence/kafka/how-to/delete/"
 MAIN_HEADER = "Your team has topics on Aiven which are not found in a nais cluster"
-WHAT_IS_THIS = " ".join(textwrap.dedent("""
+WHAT_IS_THIS = " ".join(
+    textwrap.dedent("""
     Topics on Aiven should be defined by a Topic resource in a nais cluster.
     Topics not defined by such a resource are inaccessible by applications on nais,
     which indicates that this topic may be forgotten.
-""").splitlines())
+""").splitlines()
+)
 TOPIC_HEADER = "*Forgotten topics found in the {main_project} pool for namespace `{namespace}`*"
 SOLUTION_HEADER = "*Solution*"
-SOLUTION1 = " ".join(textwrap.dedent(f"""\
+SOLUTION1 = " ".join(
+    textwrap.dedent(f"""\
     To rectify the situation, start by <{CREATE_DOC}|re-creating each topic> in the `{{team}}` namespace.
     If the intention was to delete the topic, follow the procedure for <{PERMA_DELETE_DOC}|permanently deleting data>.
-""").splitlines())
-SOLUTION2 = " ".join(textwrap.dedent("""\
+""").splitlines()
+)
+SOLUTION2 = " ".join(
+    textwrap.dedent("""\
     If you need help, reach out in <#C73B9LC86|kafka> or <#C09CHA215S5|nais>
-""").splitlines())
-FALLBACK = "Your team has topics on Aiven which are not found in a nais cluster. " \
-           "If this is not intentional, please rectify the situation."
+""").splitlines()
+)
+FALLBACK = (
+    "Your team has topics on Aiven which are not found in a nais cluster. "
+    "If this is not intentional, please rectify the situation."
+)
 
 
 def create_topic_payload(team_topic, main_project):
@@ -34,11 +42,11 @@ def create_topic_payload(team_topic, main_project):
     ]
     for collection in itertools.batched(topics, 10):
         blocks.append(FieldsSection(collection))
-    blocks.extend([
-        TextSection(Text(TextType.MRKDWN, SOLUTION_HEADER)),
-        TextSection(Text(TextType.MRKDWN, SOLUTION1.format(team=team_topic.team))),
-        TextSection(Text(TextType.MRKDWN, SOLUTION2)),
-    ])
-    return Payload(team_topic.slack_channel, attachments=[
-        Attachment(Color.WARNING, FALLBACK, blocks=blocks)
-    ])
+    blocks.extend(
+        [
+            TextSection(Text(TextType.MRKDWN, SOLUTION_HEADER)),
+            TextSection(Text(TextType.MRKDWN, SOLUTION1.format(team=team_topic.team))),
+            TextSection(Text(TextType.MRKDWN, SOLUTION2)),
+        ]
+    )
+    return Payload(team_topic.slack_channel, attachments=[Attachment(Color.WARNING, FALLBACK, blocks=blocks)])

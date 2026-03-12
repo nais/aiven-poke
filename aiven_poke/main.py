@@ -61,8 +61,9 @@ def main():
             LOG.info("Starting job with config %s", settings)
             topic_gauge = Gauge("number_of_topics", "Number of topics found", ["source"])
             team_gauge = Gauge("number_of_teams", "Number of teams with topics", ["source"])
-            expiring_users_gauge = Gauge("number_of_expiring_users",
-                                         "Number of service users with expiring credentials", ["cluster"])
+            expiring_users_gauge = Gauge(
+                "number_of_expiring_users", "Number of service users with expiring credentials", ["cluster"]
+            )
 
             aiven = AivenKafka(settings.aiven_token.get_secret_value(), settings.main_project)
             poke = Poke(settings, cluster_name)
@@ -72,7 +73,7 @@ def main():
                 handle_expiring_users(aiven, poke, cluster, expiring_users_gauge.labels(cluster_name))
 
             if settings.push_gateway_address:
-                push_to_gateway(settings.push_gateway_address, job='aiven-poke', registry=REGISTRY)
+                push_to_gateway(settings.push_gateway_address, job="aiven-poke", registry=REGISTRY)
             else:
                 LOG.info(generate_latest().decode("utf-8"))
         except ExitOnSignal:
@@ -112,9 +113,13 @@ def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
         secret = aiven_secrets.get(user.username)
         if not secret:
             continue
-        expiring_user = ExpiringUser(user.team, user.username, _parse_application(user),
-                                     _is_secret_protected(secret),
-                                     user.expiring_cert_not_valid_after_time)
+        expiring_user = ExpiringUser(
+            user.team,
+            user.username,
+            _parse_application(user),
+            _is_secret_protected(secret),
+            user.expiring_cert_not_valid_after_time,
+        )
         expiring_users_per_team[user.team].append(expiring_user)
         count += 1
     expiring_users_gauge.set(count)
@@ -138,5 +143,5 @@ def handle_topics(aiven, poke, cluster, team_gauge, topic_gauge):
     LOG.info("Completed poking about topics")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
