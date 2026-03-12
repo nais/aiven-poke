@@ -4,7 +4,21 @@ FROM python:${PY_VERSION}-slim AS deps
 
 WORKDIR /app
 
-RUN pip install poetry
+RUN apt-get update  \
+    && apt-get -y --no-install-recommends install sudo curl git ca-certificates build-essential
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV MISE_DATA_DIR="/mise"
+ENV MISE_CONFIG_DIR="/mise"
+ENV MISE_CACHE_DIR="/mise/cache"
+ENV MISE_INSTALL_PATH="/usr/local/bin/mise"
+ENV PATH="/mise/shims:$PATH"
+
+RUN curl https://mise.run | sh
+COPY mise.toml ./mise.toml
+COPY mise ./mise
+RUN mise trust -a && mise install
+
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
 COPY pyproject.toml poetry.lock ./
@@ -14,12 +28,9 @@ FROM deps AS build
 
 RUN poetry install --no-root --no-interaction
 
-COPY .prospector.yaml ./
 COPY tests ./tests/
 COPY aiven_poke ./aiven_poke/
-RUN poetry install --no-interaction && \
-	poetry run prospector && \
-	poetry run pytest
+RUN mise run check
 
 FROM python:${PY_VERSION}-slim AS docker
 

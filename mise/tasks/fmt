@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # [MISE] description="Format the files in the project"
-# [MISE] tools={ruff="latest"}
 
 set -o errexit
 set -o pipefail

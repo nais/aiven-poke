@@ -1,5 +1,6 @@
 [tools]
 poetry = "latest"
+ruff = "latest"
 
 [tasks.docker]
 description = "Build Docker image"
