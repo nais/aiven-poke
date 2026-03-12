@@ -9,7 +9,7 @@ from fiaas_logging import init_logging
 from prometheus_client import push_to_gateway, REGISTRY, generate_latest, Gauge
 
 from aiven_poke.aiven import AivenKafka
-from aiven_poke.cluster import Cluster
+from aiven_poke.cluster import Cluster, NamespaceNotFound
 from aiven_poke.endpoints import start_server
 from aiven_poke.errors import NoTopicsFoundError
 from aiven_poke.models import TeamTopic, ExpiringUser
@@ -108,7 +108,7 @@ def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
             continue
         try:
             aiven_secrets = cluster.get_aiven_secrets_by_name(user.team)
-        except cluster.NamespaceNotFound:
+        except NamespaceNotFound:
             continue
         secret = aiven_secrets.get(user.username)
         if not secret:
