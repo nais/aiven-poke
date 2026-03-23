@@ -17,7 +17,7 @@ pydantic-settings = "^2.13.1"
 lightkube = "^0.19.1"
 
 [tool.poetry.group.dev.dependencies]
-setuptools = "^82.0.0"
+setuptools = "^82.0.1"
 pytest = "^9"
 pytest-cov = "^7"
 pytest-sugar = "^1.1"
