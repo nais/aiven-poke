@@ -20,7 +20,7 @@ jobs:
       packages: "write"
     steps:
       - name: Checkout
-        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # ratchet:actions/checkout@v4
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # ratchet:actions/checkout@v4
       - name: Install cosign
         uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # ratchet:sigstore/cosign-installer@main
         with:
@@ -48,7 +48,7 @@ jobs:
     needs:
       - build
     steps:
-      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # ratchet:actions/checkout@v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # ratchet:actions/checkout@v4
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         if: github.ref == 'refs/heads/main'
