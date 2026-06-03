@@ -18,3 +18,19 @@ depends = ["install"]
 [tasks.check]
 description = "Run tests and linters"
 depends = ["test", "lint", "fmt-check"]
+
+[tasks.fmt]
+description = "Format the files in the project"
+run = "ruff format"
+
+[tasks."fmt-check"]
+description = "Check the formating of the files in the project"
+run = "ruff format --diff"
+
+[tasks.lint]
+description = "Lint the project"
+run = "ruff check"
+
+[tasks."lint-fix"]
+description = "Run automated lint fixers"
+run = "ruff check --fix"

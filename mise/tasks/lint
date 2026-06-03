@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-# [MISE] description="Lint the project"
-
-set -o errexit
-set -o pipefail
-
-ruff check

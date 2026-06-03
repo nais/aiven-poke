@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-# [MISE] description="Run automated lint fixers"
-
-set -o errexit
-set -o pipefail
-
-ruff check --fix

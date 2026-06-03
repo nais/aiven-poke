@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-# [MISE] description="Check the formating of the files in the project"
-
-set -o errexit
-set -o pipefail
-
-ruff format --diff
