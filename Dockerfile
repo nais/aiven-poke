@@ -1,10 +1,10 @@
-ARG PY_VERSION=3.12
+ARG PY_VERSION=3.13
 
 FROM python:${PY_VERSION}-slim AS deps
 
 WORKDIR /app
 
-RUN apt-get update  \
+RUN apt-get update \
     && apt-get -y --no-install-recommends install sudo curl git ca-certificates build-essential
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -16,17 +16,17 @@ ENV PATH="/mise/shims:$PATH"
 
 RUN curl https://mise.run | sh
 COPY mise.toml ./mise.toml
-COPY mise ./mise
 RUN mise trust -a && mise install
 
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV UV_PROJECT_ENVIRONMENT=/app/.venv
+ENV UV_LINK_MODE=copy
 
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --only main --no-root --no-interaction
+COPY pyproject.toml uv.lock ./
+RUN uv sync --no-dev --no-install-project
 
 FROM deps AS build
 
-RUN poetry install --no-root --no-interaction
+RUN uv sync --no-install-project
 
 COPY tests ./tests/
 COPY aiven_poke ./aiven_poke/
