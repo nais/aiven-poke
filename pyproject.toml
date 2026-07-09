@@ -13,7 +13,7 @@ dependencies = [
     "requests-toolbelt>=1.0.0,<2",
     "prometheus-client>=0.25.0,<0.26",
     "pydantic-settings>=2.14.2,<3",
-    "lightkube>=0.20.0,<0.22.0",
+    "lightkube>=0.20.0,<0.23.0",
 ]
 
 [dependency-groups]
