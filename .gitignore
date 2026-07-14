@@ -249,3 +249,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Nix
+.env*
+result*
+.direnv/

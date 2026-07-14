@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
 import os
+import re
 import signal
 import sys
 from collections import defaultdict
@@ -25,6 +26,9 @@ class ExitOnSignal(Exception):
 
 def signal_handler(_signum, _frame):
     raise ExitOnSignal()
+
+
+SERIVICE_USER_REGEX_EXPRESSION = re.compile(r"(?P<team>[^_]+)_(?P<app>.+)_(?P<hash>\w+)_(?P<suffix>\w+)")
 
 
 def compare(cluster, aiven_topics, cluster_topics):
@@ -94,9 +98,9 @@ def _is_secret_protected(secret):
 
 
 def _parse_application(user):
-    parts = user.username.split("_")
-    assert parts[0] == user.team
-    return parts[1]
+    parts = re.search(SERIVICE_USER_REGEX_EXPRESSION, user.username)
+    assert parts.group("team") == user.team
+    return parts.group("app")
 
 
 def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
