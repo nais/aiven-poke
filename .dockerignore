@@ -123,3 +123,7 @@ venv.bak/
 .VolumeIcon.icns
 .webassets-cache
 wheels/
+.env*
+result*
+.direnv/
+flake*
