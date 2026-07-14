@@ -1,6 +1,7 @@
 import logging
 from collections import defaultdict
 from datetime import datetime
+import re
 from typing import Optional
 
 import requests
@@ -33,7 +34,7 @@ class User(BaseModel):
 
     @property
     def team(self):
-        return self.username.split("_")[0]
+        return re.split("_|\\.", self.username)[0]
 
 
 class AivenAuth(requests.auth.AuthBase):

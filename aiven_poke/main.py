@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
 import os
+import re
 import signal
 import sys
 from collections import defaultdict
@@ -94,7 +95,7 @@ def _is_secret_protected(secret):
 
 
 def _parse_application(user):
-    parts = user.username.split("_")
+    parts = re.split("_|\\.", user.username)
     assert parts[0] == user.team
     return parts[1]
 
