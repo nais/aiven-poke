@@ -1,11 +1,11 @@
-ARG PY_VERSION=3.13
+ARG PY_VERSION=3.14
 
-FROM python:${PY_VERSION}-slim AS deps
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:${PY_VERSION}-dev AS deps
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get -y --no-install-recommends install sudo curl git ca-certificates build-essential
+USER root
+RUN apk add --no-cache sudo curl git ca-certificates build-base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV MISE_DATA_DIR="/mise"
@@ -31,10 +31,12 @@ RUN uv sync --no-install-project
 COPY tests ./tests/
 COPY aiven_poke ./aiven_poke/
 RUN mise run check
+RUN python3 -c "import aiven_poke" ## Minimal testing that imports actually work
 
-FROM python:${PY_VERSION}-slim AS docker
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:${PY_VERSION} AS docker
 
 WORKDIR /app
+USER nonroot
 
 COPY --from=deps /app/.venv ./.venv/
 COPY --from=build /app/aiven_poke ./aiven_poke/
@@ -44,5 +46,4 @@ ENV PATH="/bin:/usr/bin:/usr/local/bin:/app/.venv/bin"
 ARG PY_VERSION
 ENV PYTHONPATH=/app/.venv/lib/python${PY_VERSION}/site-packages
 
-RUN python3 -c "import aiven_poke" ## Minimal testing that imports actually work
 ENTRYPOINT ["python", "-m", "aiven_poke"]
