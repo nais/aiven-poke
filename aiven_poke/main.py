@@ -7,13 +7,13 @@ import sys
 from collections import defaultdict
 
 from fiaas_logging import init_logging
-from prometheus_client import push_to_gateway, REGISTRY, generate_latest, Gauge
+from prometheus_client import REGISTRY, Gauge, generate_latest, push_to_gateway
 
 from aiven_poke.aiven import AivenKafka
 from aiven_poke.cluster import Cluster, NamespaceNotFound
 from aiven_poke.endpoints import start_server
 from aiven_poke.errors import NoTopicsFoundError
-from aiven_poke.models import TeamTopic, ExpiringUser
+from aiven_poke.models import ExpiringUser, TeamTopic
 from aiven_poke.settings import Settings
 from aiven_poke.slack import Poke
 
@@ -48,7 +48,7 @@ def _init_logging():
         init_logging(format="json")
     else:
         init_logging(debug=True)
-    logging.getLogger("werkzeug").setLevel(logging.WARN)
+    logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 
 def main():
@@ -66,7 +66,9 @@ def main():
             topic_gauge = Gauge("number_of_topics", "Number of topics found", ["source"])
             team_gauge = Gauge("number_of_teams", "Number of teams with topics", ["source"])
             expiring_users_gauge = Gauge(
-                "number_of_expiring_users", "Number of service users with expiring credentials", ["cluster"]
+                "number_of_expiring_users",
+                "Number of service users with expiring credentials",
+                ["cluster"],
             )
 
             aiven = AivenKafka(settings.aiven_token.get_secret_value(), settings.main_project)
@@ -85,8 +87,8 @@ def main():
         except NoTopicsFoundError:
             LOG.error("No topics found in cluster! This is typically a sign of misconfiguration, exiting")
             exit_code = 112
-        except Exception as e:
-            logging.exception("unwanted exception: %s", e)
+        except Exception:
+            LOG.exception("unwanted exception: %s")
             exit_code = 113
     finally:
         server.shutdown()
@@ -128,7 +130,7 @@ def handle_expiring_users(aiven, poke, cluster, expiring_users_gauge):
         count += 1
     expiring_users_gauge.set(count)
 
-    slack_channels_per_team = {team: cluster.get_slack_channel(team) for team in expiring_users_per_team.keys()}
+    slack_channels_per_team = {team: cluster.get_slack_channel(team) for team in expiring_users_per_team}
 
     poke.users(expiring_users_per_team, slack_channels_per_team)
     LOG.info("Completed poking about expiring users")

@@ -1,6 +1,4 @@
-from typing import Optional
-
-from pydantic import HttpUrl, SecretStr, Secret
+from pydantic import HttpUrl, Secret, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,9 +15,9 @@ class Settings(BaseSettings):
 
     aiven_token: SecretStr
     main_project: str
-    webhook_url: Optional[SecretUrlPath] = None
+    webhook_url: SecretUrlPath | None = None
     webhook_enabled: bool = True
-    push_gateway_address: Optional[str] = None
+    push_gateway_address: str | None = None
     expiring_users_enabled: bool = False
     topics_enabled: bool = False
-    override_slack_channel: Optional[str] = None
+    override_slack_channel: str | None = None

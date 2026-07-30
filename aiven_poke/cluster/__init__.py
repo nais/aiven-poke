@@ -2,10 +2,10 @@ import functools
 import logging
 from collections import defaultdict
 
-from lightkube import Client, ApiError, ALL_NS
+from lightkube import ALL_NS, ApiError, Client
 from lightkube.config.kubeconfig import KubeConfig
 from lightkube.generic_resource import create_namespaced_resource
-from lightkube.resources.core_v1 import Service, Namespace, Secret
+from lightkube.resources.core_v1 import Namespace, Secret, Service
 from prometheus_client import Summary
 
 from aiven_poke.cluster.resources import Topic
@@ -38,7 +38,7 @@ class Cluster:
         self._settings = settings
         self._latency = Summary("k8s_latency_seconds", "Kubernetes latency", ["action", "resource"])
 
-    @functools.lru_cache
+    @functools.lru_cache  # noqa: B019
     def get_namespace(self, team):
         try:
             with self._latency.labels("get", "namespace").time():
@@ -52,7 +52,7 @@ class Cluster:
                 raise NamespaceNotFound from e
             raise
 
-    @functools.lru_cache
+    @functools.lru_cache  # noqa: B019
     def get_slack_channel(self, team):
         if self._settings.override_slack_channel is not None:
             return self._settings.override_slack_channel
@@ -60,7 +60,10 @@ class Cluster:
         annotations = namespace.metadata.annotations
         slack_channel = annotations.get(SLACK_CHANNEL_KEY)
         if not slack_channel:
-            LOG.error("Team %s has no slack channel set, directing poke to #nais-alerts-info", team)
+            LOG.error(
+                "Team %s has no slack channel set, directing poke to #nais-alerts-info",
+                team,
+            )
             return "#nais-alerts-info"
         if not slack_channel.startswith("#"):
             return f"#{slack_channel}"
@@ -77,13 +80,15 @@ class Cluster:
         LOG.info("%d namespaces with topics found in cluster", len(namespaced_topics))
         return namespaced_topics
 
-    @functools.lru_cache
+    @functools.lru_cache  # noqa: B019
     def get_aiven_secrets_by_name(self, team):
         namespace = self.get_namespace(team)
         aiven_secrets_by_name = {}
         with self._latency.labels("list", "secret").time():
             secrets = self._client.list(
-                Secret, namespace=namespace.metadata.name, labels={"type": "aivenator.aiven.nais.io"}
+                Secret,
+                namespace=namespace.metadata.name,
+                labels={"type": "aivenator.aiven.nais.io"},
             )
             for secret in secrets:
                 service_user = secret.metadata.annotations.get("kafka.aiven.nais.io/serviceUser")

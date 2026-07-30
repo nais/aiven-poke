@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Poke teams about Aiven related issues"
 authors = [{name = "Nais", email = "nais@nav.no"}]
 license = {text = "MIT"}
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = [
     "Flask>=3.1.3,<4",
     "fiaas-logging>=0.1.1,<0.2",

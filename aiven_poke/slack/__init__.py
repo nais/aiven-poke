@@ -1,6 +1,6 @@
 import dataclasses
 import logging
-from typing import Iterable, MutableMapping
+from collections.abc import Iterable, MutableMapping
 
 import requests
 from prometheus_client import Summary

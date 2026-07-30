@@ -1,7 +1,7 @@
 import itertools
 import textwrap
 
-from .payload import Text, TextType, Payload, Attachment, Color, Header, TextSection, FieldsSection
+from .payload import Attachment, Color, FieldsSection, Header, Payload, Text, TextSection, TextType
 
 CREATE_DOC = "https://doc.nais.io/persistence/kafka/how-to/create/"
 PERMA_DELETE_DOC = "https://doc.nais.io/persistence/kafka/how-to/delete/"

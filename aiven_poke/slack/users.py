@@ -1,7 +1,7 @@
 import textwrap
 
-from .payload import Payload, Attachment, Color, Header, Text, TextType, TextSection
 from ..models import ExpiringUser
+from .payload import Attachment, Color, Header, Payload, Text, TextSection, TextType
 
 RENEW_DOC = "https://doc.nais.io/persistence/kafka/how-to/renew-credentials-for-non-nais/"
 

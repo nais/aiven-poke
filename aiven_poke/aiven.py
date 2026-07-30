@@ -1,8 +1,7 @@
 import logging
+import re
 from collections import defaultdict
 from datetime import datetime
-import re
-from typing import Optional
 
 import requests
 from prometheus_client import Summary
@@ -29,7 +28,7 @@ class Topic(BaseModel):
 
 
 class User(BaseModel):
-    expiring_cert_not_valid_after_time: Optional[datetime] = None
+    expiring_cert_not_valid_after_time: datetime | None = None
     username: str
 
     @property
