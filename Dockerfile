@@ -1,6 +1,4 @@
-ARG PY_VERSION=3.14
-
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:${PY_VERSION}-dev AS deps
+FROM cgr.dev/chainguard/python:latest-dev AS deps
 
 WORKDIR /app
 
@@ -33,7 +31,7 @@ COPY aiven_poke ./aiven_poke/
 RUN mise run check
 RUN python3 -c "import aiven_poke" ## Minimal testing that imports actually work
 
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:${PY_VERSION} AS docker
+FROM cgr.dev/chainguard/python:latest AS docker
 
 WORKDIR /app
 USER nonroot
