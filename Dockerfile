@@ -40,8 +40,9 @@ COPY --from=deps /app/.venv ./.venv/
 COPY --from=build /app/aiven_poke ./aiven_poke/
 
 ENV VIRTUAL_ENV=/app/.venv
-ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+ENV PATH="${VIRTUAL_ENV}/bin:/bin:/usr/bin:/usr/local/bin"
 
+# Verify dependencies resolve with the final image's interpreter and paths.
 RUN ["python", "-c", "import fiaas_logging"]
 
 ENTRYPOINT ["python", "-m", "aiven_poke"]
