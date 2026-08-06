@@ -39,9 +39,9 @@ USER nonroot
 COPY --from=deps /app/.venv ./.venv/
 COPY --from=build /app/aiven_poke ./aiven_poke/
 
-ENV PATH="/bin:/usr/bin:/usr/local/bin:/app/.venv/bin"
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
-ARG PY_VERSION
-ENV PYTHONPATH=/app/.venv/lib/python${PY_VERSION}/site-packages
+RUN ["python", "-c", "import fiaas_logging"]
 
 ENTRYPOINT ["python", "-m", "aiven_poke"]
