@@ -18,7 +18,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "setuptools>=82.0.1",
+    "setuptools>=83.0.0",
     "pytest>=9",
     "pytest-cov>=7",
     "pytest-sugar>=1.1",
